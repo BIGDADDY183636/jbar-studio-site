@@ -26,13 +26,13 @@ export default function Nav() {
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-        {/* Wordmark — JBAR² */}
+        {/* Wordmark */}
         <a
           href="#"
           className="font-serif font-bold text-paper tracking-[0.18em] uppercase text-[0.9rem] leading-none select-none"
           style={{ fontVariationSettings: '"opsz" 24, "WONK" 0' }}
         >
-          JBAR<span className="text-red" style={{ letterSpacing: 0 }}>²</span>
+          JBAR
         </a>
 
         <div className="hidden md:flex items-center gap-8">

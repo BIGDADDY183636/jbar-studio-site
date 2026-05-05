@@ -15,7 +15,7 @@ export default function Footer() {
               className="font-serif font-bold text-red tracking-[0.18em] text-[0.9rem] uppercase mb-3 leading-none"
               style={{ fontVariationSettings: '"opsz" 24, "WONK" 0' }}
             >
-              JBAR<span style={{ letterSpacing: 0 }}>²</span>
+              JBAR
             </p>
             <p className="font-sans text-[0.8rem] text-muted leading-relaxed">
               Independent web studio.
