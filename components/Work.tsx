@@ -26,6 +26,22 @@ const projects = [
       "Owner-operated hair salon in Lincoln Square. By appointment, built around one stylist.",
     url: "https://salon.jbar.studio",
   },
+  {
+    number: "04",
+    category: "Fitness",
+    name: "Northbridge Athletic",
+    description:
+      "Independent strength gym on Chicago's North Side. Coach-led, no-mirror.",
+    url: "https://gym.jbar.studio",
+  },
+  {
+    number: "05",
+    category: "Bookstore",
+    name: "Page & Spine",
+    description:
+      "Independent neighborhood bookstore. Carefully chosen books, Western Avenue.",
+    url: "https://books.jbar.studio",
+  },
 ];
 
 export default function Work() {
