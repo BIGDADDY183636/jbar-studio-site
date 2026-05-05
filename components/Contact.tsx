@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 
-// TODO: Replace YOUR_FORM_ID with your actual Formspree form ID.
-// Create a free form at https://formspree.io — you'll get a URL like:
-// https://formspree.io/f/xyzabcde
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwvyollb";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
