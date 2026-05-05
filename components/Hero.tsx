@@ -1,20 +1,41 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  const reveal = (delayMs: number, durationMs = 700): React.CSSProperties => ({
+    opacity: mounted ? 1 : 0,
+    transform: mounted ? "translateY(0px)" : "translateY(22px)",
+    transition: `opacity ${durationMs}ms cubic-bezier(0.16,1,0.3,1) ${delayMs}ms, transform ${durationMs}ms cubic-bezier(0.16,1,0.3,1) ${delayMs}ms`,
+  });
+
   return (
-    <section className="min-h-[88vh] flex flex-col justify-center bg-paper">
+    <section className="min-h-[88vh] flex flex-col justify-center bg-canvas">
       <div className="max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
         {/* Studio label */}
-        <p className="font-sans text-[0.65rem] font-medium tracking-[0.28em] uppercase text-ink/35 mb-10">
+        <p
+          className="font-sans text-[0.62rem] font-semibold tracking-[0.32em] uppercase text-muted mb-10"
+          style={reveal(200)}
+        >
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* Headline — authoritative, Fraunces at maximum sharpness */}
+        {/* Headline */}
         <h1
-          className="font-serif font-bold text-ink max-w-4xl"
+          className="font-serif font-bold text-paper max-w-4xl"
           style={{
-            fontSize: "clamp(3rem, 5.8vw, 5.4rem)",
-            lineHeight: 1.05,
-            letterSpacing: "-0.02em",
+            fontSize: "clamp(3.4rem, 6.5vw, 6.8rem)",
+            lineHeight: 1.02,
+            letterSpacing: "-0.025em",
             fontVariationSettings: '"opsz" 144, "WONK" 0',
+            ...reveal(380, 950),
           }}
         >
           Websites for the businesses
@@ -22,23 +43,29 @@ export default function Hero() {
           that built the neighborhood.
         </h1>
 
-        {/* Subhead */}
-        <p className="font-sans text-[1rem] font-normal text-ink/55 mt-8 tracking-wide">
-          $400 flat.&ensp;Built in a week.&ensp;Live forever.
+        {/* Red pricing line */}
+        <p
+          className="font-sans text-[0.88rem] font-medium text-red mt-8 tracking-wide"
+          style={reveal(700)}
+        >
+          $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Live forever
         </p>
 
         {/* CTA */}
-        <div className="mt-10">
+        <div style={reveal(900)}>
           <a
             href="#contact"
-            className="inline-block font-sans text-[0.75rem] font-semibold tracking-[0.12em] uppercase bg-accent text-paper px-7 py-3.5 rounded-sm hover:bg-accent-hover transition-colors duration-200"
+            className="inline-block mt-8 font-sans text-[0.78rem] font-semibold tracking-[0.12em] uppercase text-red hover:text-red-dark transition-colors duration-200"
           >
-            Start a project&nbsp;→
+            Let&apos;s talk&nbsp;→
           </a>
         </div>
 
-        {/* Bottom rule — structural, not decorative */}
-        <div className="mt-20 w-full h-px bg-ink/8" />
+        {/* Bottom rule */}
+        <div
+          className="mt-20 w-full h-px bg-paper/[0.07]"
+          style={reveal(1100, 600)}
+        />
       </div>
     </section>
   );

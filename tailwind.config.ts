@@ -9,21 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#f7f5f1",
-        "paper-warm": "#f0ede7",
-        ink: "#0c0c0a",
-        "ink-soft": "#3a3a36",
-        "ink-muted": "#6b6b64",
-        accent: "#1e3a8a",
-        "accent-hover": "#162d6e",
-        "accent-light": "#2d4fa8",
+        canvas: "#0a0908",
+        "canvas-alt": "#14100f",
+        "canvas-raised": "#1e1916",
+        paper: "#f4f1ea",
+        "paper-dim": "#b8b4ac",
+        muted: "#8a8680",
+        red: "#d63031",
+        "red-dark": "#b82828",
+        "red-dim": "#3d1010",
       },
       fontFamily: {
         serif: ["var(--font-fraunces)", "Georgia", "serif"],
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-      },
-      letterSpacing: {
-        label: "0.2em",
       },
     },
   },

@@ -8,12 +8,23 @@
   }
 
   body {
-    background-color: #f7f5f1;
-    color: #0c0c0a;
+    background-color: #0a0908;
+    color: #f4f1ea;
   }
 
   ::selection {
-    background-color: #1e3a8a;
-    color: #f7f5f1;
+    background-color: #d63031;
+    color: #f4f1ea;
+  }
+
+  /* Respect reduced-motion preference globally */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
