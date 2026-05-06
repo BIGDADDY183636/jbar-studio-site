@@ -10,11 +10,35 @@ const links = [
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+      if (window.scrollY < 200) setActiveSection("");
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Active section via IntersectionObserver
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      // Trigger when section enters the top 30% of the viewport
+      { threshold: 0, rootMargin: "0px 0px -70% 0px" }
+    );
+
+    links.forEach(({ label }) => {
+      const el = document.getElementById(label);
+      if (el) io.observe(el);
+    });
+
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -26,7 +50,7 @@ export default function Nav() {
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-        {/* Wordmark — Inter 900, tight, technical */}
+        {/* Wordmark */}
         <a
           href="#"
           className="font-sans font-black text-paper leading-none select-none"
@@ -40,7 +64,11 @@ export default function Nav() {
             <a
               key={label}
               href={href}
-              className="nav-underline font-sans text-[0.72rem] font-medium text-paper/45 hover:text-paper transition-colors duration-200 tracking-wide"
+              className={`nav-underline font-sans text-[0.72rem] font-medium tracking-wide transition-colors duration-200 ${
+                activeSection === label
+                  ? "text-red"
+                  : "text-paper/45 hover:text-paper"
+              }`}
             >
               {label}
             </a>

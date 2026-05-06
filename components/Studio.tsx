@@ -32,8 +32,9 @@ export default function Studio() {
           <Reveal delay={0.14}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
               JBAR Design Studio is a small independent web studio based on
-              Chicago&apos;s North Side. We build websites for local businesses
-              who&apos;d rather run their business than wrestle with Wix.
+              Chicago&apos;s North Side. We build websites for independent
+              businesses who&apos;d rather run their business than wrestle with
+              Wix.
             </p>
           </Reveal>
           <Reveal delay={0.2}>
@@ -42,13 +43,13 @@ export default function Studio() {
               scratch — no templates, no themes, no page builders. The result is
               a site that looks like your business, not like everyone
               else&apos;s. We keep the price flat and the timeline short because
-              that&apos;s what small business owners actually need.
+              that&apos;s what independent business owners actually need.
             </p>
           </Reveal>
           <Reveal delay={0.26}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
-              If you&apos;re a small business owner in Chicago and you&apos;ve
-              been meaning to get a real website, that&apos;s why we exist.
+              If you run an independent business in Chicago and you&apos;ve been
+              meaning to get a real website, that&apos;s why we exist.
             </p>
           </Reveal>
         </div>

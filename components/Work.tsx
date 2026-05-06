@@ -47,13 +47,26 @@ const projects = [
 export default function Work() {
   return (
     <>
+      {/* Section header — anchors the #work nav link */}
+      <div id="work" className="bg-canvas border-t border-red/[0.12] py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <Reveal>
+            <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center">
+              <span className="text-red">[ </span>
+              <span className="text-muted">01 / SELECTED WORK</span>
+              <span className="text-red"> ]</span>
+            </p>
+          </Reveal>
+        </div>
+      </div>
+
+      {/* Case studies */}
       {projects.map((p, i) => (
         <section
           key={p.number}
-          id={i === 0 ? "work" : undefined}
-          className={`min-h-screen py-24 ${
+          className={`min-h-screen py-24 border-t border-red/[0.12] ${
             i % 2 === 0 ? "bg-canvas" : "bg-canvas-alt"
-          } ${i > 0 ? "border-t border-red/[0.12]" : ""}`}
+          }`}
         >
           <div className="max-w-7xl mx-auto px-6 w-full">
             {/* Technical bracket label */}
@@ -67,7 +80,7 @@ export default function Work() {
               </p>
             </Reveal>
 
-            {/* Project name — Inter 900 */}
+            {/* Project name */}
             <Reveal delay={0.1} duration={950}>
               <h2
                 className="font-sans font-black text-paper leading-none mb-5"
@@ -87,7 +100,7 @@ export default function Work() {
               </p>
             </Reveal>
 
-            {/* Live iframe — unchanged sizing/styling */}
+            {/* Live iframe */}
             <Reveal delay={0.24} duration={900}>
               <IframePreview
                 src={p.url}
@@ -96,7 +109,7 @@ export default function Work() {
               />
             </Reveal>
 
-            {/* View live — arrow slides on hover */}
+            {/* View live — the only visible CTA text for this demo */}
             <Reveal delay={0.36}>
               <a
                 href={p.url}

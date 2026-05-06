@@ -18,8 +18,7 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-[88vh] flex flex-col items-center justify-center bg-canvas overflow-hidden">
-
-      {/* Ambient gradient blobs — barely there, only noticed on second visit */}
+      {/* Ambient gradient blobs */}
       <div
         aria-hidden="true"
         className="absolute inset-0 overflow-hidden pointer-events-none"
@@ -50,6 +49,18 @@ export default function Hero() {
 
       {/* Content — centered */}
       <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-20 w-full text-center">
+
+        {/* Booking status pill */}
+        <div
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red/[0.07] border border-red/20 mb-8"
+          style={reveal(80)}
+        >
+          <div className="w-1.5 h-1.5 rounded-full bg-red animate-pulse flex-shrink-0" />
+          <span className="font-mono text-[0.56rem] tracking-[0.2em] uppercase text-red/70">
+            Currently booking — June 2026
+          </span>
+        </div>
+
         {/* Studio label */}
         <p
           className="font-mono text-[0.6rem] tracking-[0.28em] uppercase text-muted mb-10"
@@ -58,7 +69,7 @@ export default function Hero() {
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* Headline — Inter 900, massive, centered */}
+        {/* Headline */}
         <h1
           className="font-sans font-black text-paper mx-auto"
           style={{
@@ -80,11 +91,8 @@ export default function Hero() {
           $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Live forever
         </p>
 
-        {/* CTA — centered button with glow */}
-        <div
-          className="flex justify-center mt-10"
-          style={reveal(880)}
-        >
+        {/* CTA */}
+        <div className="flex justify-center mt-10" style={reveal(880)}>
           <a
             href="#contact"
             className="btn-glow inline-flex items-center gap-2 font-sans text-[0.75rem] font-semibold tracking-[0.12em] uppercase bg-red text-paper px-7 py-3.5 rounded-full"

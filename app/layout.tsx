@@ -17,9 +17,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jbar.studio"),
   title: "JBAR Design Studio — Custom Websites for Independent Businesses",
   description:
-    "JBAR Design Studio builds custom websites for local businesses in Chicago. $400 flat. Built in a week. No templates.",
+    "Custom websites for Chicago's independent businesses. $400 flat. Built in a week. No templates.",
 };
 
 export default function RootLayout({
