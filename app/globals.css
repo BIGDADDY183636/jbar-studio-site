@@ -16,15 +16,69 @@
     background-color: #d63031;
     color: #f4f1ea;
   }
+}
 
-  /* Respect reduced-motion preference globally */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+/* ── Ambient hero blobs ─────────────────────────────── */
+@keyframes blob-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(40px, -30px) scale(1.08); }
+  66%       { transform: translate(-25px, 20px) scale(0.94); }
+}
+@keyframes blob-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(-35px, 28px) scale(1.05); }
+  66%       { transform: translate(28px, -18px) scale(0.96); }
+}
+.ambient-blob-1 { animation: blob-1 38s ease-in-out infinite; }
+.ambient-blob-2 { animation: blob-2 52s ease-in-out infinite; }
+
+/* ── Nav link underline draw ────────────────────────── */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #d63031;
+  transition: width 220ms ease;
+}
+.nav-underline:hover::after {
+  width: 100%;
+}
+
+/* ── Button glow ────────────────────────────────────── */
+.btn-glow {
+  transition: transform 150ms ease, box-shadow 200ms ease,
+    background-color 200ms ease;
+}
+.btn-glow:hover {
+  transform: scale(1.025);
+  box-shadow: 0 0 20px rgba(214, 48, 49, 0.22);
+}
+
+/* ── Footer pulse line ──────────────────────────────── */
+@keyframes pulse-line {
+  0%, 100% { opacity: 0.05; }
+  50%       { opacity: 0.14; }
+}
+.footer-pulse {
+  animation: pulse-line 5s ease-in-out infinite;
+}
+
+/* ── Scroll reveal ──────────────────────────────────── */
+/* (handled via inline styles in Reveal.tsx) */
+
+/* ── Reduced motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

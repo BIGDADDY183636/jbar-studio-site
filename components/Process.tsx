@@ -27,21 +27,23 @@ export default function Process() {
   return (
     <section className="bg-canvas border-t border-paper/[0.06] py-24">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Label */}
+        {/* Centered label */}
         <Reveal>
-          <p className="font-sans text-[0.6rem] font-bold tracking-[0.38em] uppercase text-red mb-12">
-            03&ensp;/&ensp;PROCESS
+          <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-10">
+            <span className="text-red">[ </span>
+            <span className="text-muted">03 / PROCESS</span>
+            <span className="text-red"> ]</span>
           </p>
         </Reveal>
 
-        {/* Headline */}
+        {/* Centered headline */}
         <Reveal delay={0.1} duration={900}>
           <h2
-            className="font-serif font-bold text-paper leading-tight mb-16"
+            className="font-sans font-black text-paper text-center mx-auto mb-16"
             style={{
               fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
-              letterSpacing: "-0.02em",
-              fontVariationSettings: '"opsz" 72, "WONK" 0',
+              letterSpacing: "-0.025em",
+              maxWidth: "12ch",
             }}
           >
             How it works.
@@ -53,12 +55,12 @@ export default function Process() {
           {steps.map((step, i) => (
             <Reveal key={step.number} delay={0.12 + i * 0.08}>
               <div className="bg-canvas-raised border border-paper/[0.07] p-7 rounded-sm h-full">
-                <p className="font-sans text-[0.58rem] font-bold tracking-[0.38em] uppercase text-red mb-6">
+                <p className="font-mono text-[0.58rem] tracking-[0.3em] uppercase text-red mb-6">
                   {step.number}
                 </p>
                 <h3
-                  className="font-serif font-bold text-paper text-[1.5rem] leading-tight mb-3"
-                  style={{ fontVariationSettings: '"opsz" 24, "WONK" 0' }}
+                  className="font-sans font-bold text-paper text-[1.5rem] leading-tight mb-3"
+                  style={{ letterSpacing: "-0.02em" }}
                 >
                   {step.title}
                 </h3>

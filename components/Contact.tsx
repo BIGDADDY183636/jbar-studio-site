@@ -30,10 +30,12 @@ export default function Contact() {
   return (
     <section id="contact" className="bg-canvas border-t border-red/20 py-28">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Label */}
+        {/* Centered label */}
         <Reveal>
-          <p className="font-sans text-[0.6rem] font-bold tracking-[0.38em] uppercase text-red mb-12">
-            05&ensp;/&ensp;CONTACT
+          <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-12">
+            <span className="text-red">[ </span>
+            <span className="text-muted">05 / CONTACT</span>
+            <span className="text-red"> ]</span>
           </p>
         </Reveal>
 
@@ -42,11 +44,10 @@ export default function Contact() {
           <div>
             <Reveal delay={0.1} duration={900}>
               <h2
-                className="font-serif font-bold text-paper leading-tight mb-6"
+                className="font-sans font-black text-paper leading-tight mb-6"
                 style={{
                   fontSize: "clamp(2.8rem, 5.5vw, 5rem)",
-                  letterSpacing: "-0.025em",
-                  fontVariationSettings: '"opsz" 96, "WONK" 0',
+                  letterSpacing: "-0.03em",
                 }}
               >
                 Let&apos;s start{" "}
@@ -75,8 +76,8 @@ export default function Contact() {
               {status === "sent" ? (
                 <div className="py-10">
                   <h3
-                    className="font-serif font-bold text-paper text-[1.8rem] leading-tight mb-3"
-                    style={{ fontVariationSettings: '"opsz" 36, "WONK" 0' }}
+                    className="font-sans font-black text-paper text-[1.8rem] leading-tight mb-3"
+                    style={{ letterSpacing: "-0.025em" }}
                   >
                     Got it.
                   </h3>
@@ -88,7 +89,7 @@ export default function Contact() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Name */}
                   <div>
-                    <label className="block font-sans text-[0.6rem] font-semibold tracking-[0.22em] uppercase text-paper/30 mb-2">
+                    <label className="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2">
                       Name
                     </label>
                     <input
@@ -101,7 +102,7 @@ export default function Contact() {
                   </div>
                   {/* Email */}
                   <div>
-                    <label className="block font-sans text-[0.6rem] font-semibold tracking-[0.22em] uppercase text-paper/30 mb-2">
+                    <label className="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2">
                       Email
                     </label>
                     <input
@@ -114,7 +115,7 @@ export default function Contact() {
                   </div>
                   {/* Message */}
                   <div>
-                    <label className="block font-sans text-[0.6rem] font-semibold tracking-[0.22em] uppercase text-paper/30 mb-2">
+                    <label className="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2">
                       Tell us about your business
                     </label>
                     <textarea
@@ -129,7 +130,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={status === "sending"}
-                    className="w-full bg-red text-paper font-sans text-[0.75rem] font-bold tracking-[0.14em] uppercase py-4 rounded-sm hover:bg-red-dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-glow w-full bg-red text-paper font-sans text-[0.75rem] font-bold tracking-[0.14em] uppercase py-4 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {status === "sending" ? "Sending…" : "Start a conversation →"}
                   </button>

@@ -9,11 +9,11 @@ export default function Footer() {
     <footer className="bg-canvas-alt border-t border-paper/[0.06] py-14 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
-          {/* Brand */}
+          {/* Brand — Inter 900 wordmark */}
           <div>
             <p
-              className="font-serif font-bold text-red tracking-[0.18em] text-[0.9rem] uppercase mb-3 leading-none"
-              style={{ fontVariationSettings: '"opsz" 24, "WONK" 0' }}
+              className="font-sans font-black text-red mb-3 leading-none"
+              style={{ fontSize: "0.9rem", letterSpacing: "-0.02em" }}
             >
               JBAR
             </p>
@@ -26,7 +26,7 @@ export default function Footer() {
 
           {/* Links */}
           <div>
-            <p className="font-sans text-[0.58rem] font-bold tracking-[0.28em] uppercase text-paper/20 mb-4">
+            <p className="font-mono text-[0.56rem] tracking-[0.22em] uppercase text-paper/20 mb-4">
               Navigate
             </p>
             <ul className="space-y-2.5">
@@ -34,7 +34,7 @@ export default function Footer() {
                 <li key={label}>
                   <a
                     href={href}
-                    className="font-sans text-[0.82rem] text-muted hover:text-paper transition-colors duration-150"
+                    className="nav-underline font-sans text-[0.82rem] text-muted hover:text-paper transition-colors duration-150"
                   >
                     {label}
                   </a>
@@ -45,20 +45,22 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <p className="font-sans text-[0.58rem] font-bold tracking-[0.28em] uppercase text-paper/20 mb-4">
+            <p className="font-mono text-[0.56rem] tracking-[0.22em] uppercase text-paper/20 mb-4">
               Get in touch
             </p>
             <a
               href="mailto:hello@jbar.studio"
-              className="font-sans text-[0.82rem] text-muted hover:text-red transition-colors duration-150"
+              className="nav-underline font-sans text-[0.82rem] text-muted hover:text-red transition-colors duration-150"
             >
               hello@jbar.studio
             </a>
           </div>
         </div>
 
-        <div className="border-t border-paper/[0.05] pt-7">
-          <p className="font-sans text-[0.57rem] text-paper/18 tracking-wide uppercase">
+        {/* Pulse line + copyright */}
+        <div className="pt-7 space-y-4">
+          <div className="footer-pulse h-px w-full bg-paper" />
+          <p className="font-mono text-[0.54rem] text-paper/18 tracking-[0.15em] uppercase">
             © 2026 JBAR Design Studio.&ensp;Built in Chicago.
           </p>
         </div>

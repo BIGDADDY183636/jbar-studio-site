@@ -26,11 +26,11 @@ export default function Nav() {
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-        {/* Wordmark */}
+        {/* Wordmark — Inter 900, tight, technical */}
         <a
           href="#"
-          className="font-serif font-bold text-paper tracking-[0.18em] uppercase text-[0.9rem] leading-none select-none"
-          style={{ fontVariationSettings: '"opsz" 24, "WONK" 0' }}
+          className="font-sans font-black text-paper leading-none select-none"
+          style={{ fontSize: "0.9rem", letterSpacing: "-0.02em" }}
         >
           JBAR
         </a>
@@ -40,14 +40,14 @@ export default function Nav() {
             <a
               key={label}
               href={href}
-              className="font-sans text-[0.72rem] font-medium text-paper/45 hover:text-paper transition-colors duration-150 tracking-wide"
+              className="nav-underline font-sans text-[0.72rem] font-medium text-paper/45 hover:text-paper transition-colors duration-200 tracking-wide"
             >
               {label}
             </a>
           ))}
           <a
             href="#contact"
-            className="font-sans text-[0.7rem] font-semibold tracking-[0.1em] bg-red text-paper px-4 py-2.5 rounded-full hover:bg-red-dark transition-colors duration-200"
+            className="btn-glow font-sans text-[0.7rem] font-semibold tracking-[0.1em] bg-red text-paper px-4 py-2.5 rounded-full"
           >
             Start a project
           </a>
