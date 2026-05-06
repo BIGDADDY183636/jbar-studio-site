@@ -69,7 +69,7 @@ export default function Hero() {
             ...reveal(360, 950),
           }}
         >
-          Websites for the businesses that built the neighborhood.
+          Custom websites for Chicago&apos;s independent businesses.
         </h1>
 
         {/* Red pricing line */}
