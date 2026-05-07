@@ -134,6 +134,15 @@ export default function Contact() {
                   >
                     {status === "sending" ? "Sending…" : "Start a conversation →"}
                   </button>
+                  <p className="font-sans text-[0.75rem] text-muted text-center">
+                    Prefer email?{" "}
+                    <a
+                      href="mailto:hello@jbar.studio"
+                      className="text-red hover:text-red-dark transition-colors"
+                    >
+                      hello@jbar.studio
+                    </a>
+                  </p>
                   {status === "error" && (
                     <p className="font-sans text-[0.78rem] text-red/80">
                       Something went wrong. Email me at{" "}

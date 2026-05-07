@@ -57,7 +57,7 @@ export default function Hero() {
         >
           <div className="w-1.5 h-1.5 rounded-full bg-red animate-pulse flex-shrink-0" />
           <span className="font-mono text-[0.56rem] tracking-[0.2em] uppercase text-red/70">
-            Currently booking — June 2026
+            Booking now
           </span>
         </div>
 

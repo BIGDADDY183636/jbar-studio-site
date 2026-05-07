@@ -49,12 +49,17 @@ export default function Work() {
     <>
       {/* Section header — anchors the #work nav link */}
       <div id="work" className="bg-canvas border-t border-red/[0.12] py-16">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 text-center">
           <Reveal>
-            <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center">
+            <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase">
               <span className="text-red">[ </span>
-              <span className="text-muted">01 / SELECTED WORK</span>
+              <span className="text-muted">01 / CONCEPT WORK</span>
               <span className="text-red"> ]</span>
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="font-mono text-[0.56rem] tracking-[0.12em] text-muted/40 mt-3">
+              Concept builds — designed to demonstrate range. Not real businesses.
             </p>
           </Reveal>
         </div>
