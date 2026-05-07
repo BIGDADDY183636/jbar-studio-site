@@ -56,7 +56,7 @@ export default function Contact() {
             </Reveal>
             <Reveal delay={0.18}>
               <p className="font-sans text-[0.9rem] text-muted leading-relaxed mb-10 max-w-sm">
-                Tell us about your business — we&apos;ll be in touch within 24
+                Tell me about your business — I&apos;ll be in touch within 24
                 hours.
               </p>
             </Reveal>
@@ -82,7 +82,7 @@ export default function Contact() {
                     Got it.
                   </h3>
                   <p className="font-sans text-[0.9rem] text-muted">
-                    We&apos;ll be in touch within 24 hours.
+                    I&apos;ll be in touch within 24 hours.
                   </p>
                 </div>
               ) : (
@@ -116,7 +116,7 @@ export default function Contact() {
                   {/* Message */}
                   <div>
                     <label className="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2">
-                      Tell us about your business
+                      Tell me about your business
                     </label>
                     <textarea
                       name="message"
@@ -136,7 +136,7 @@ export default function Contact() {
                   </button>
                   {status === "error" && (
                     <p className="font-sans text-[0.78rem] text-red/80">
-                      Something went wrong. Email us at{" "}
+                      Something went wrong. Email me at{" "}
                       <a href="mailto:hello@jbar.studio" className="underline">
                         hello@jbar.studio
                       </a>

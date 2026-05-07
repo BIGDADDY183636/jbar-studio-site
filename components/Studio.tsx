@@ -31,25 +31,25 @@ export default function Studio() {
         <div className="max-w-2xl mx-auto space-y-5">
           <Reveal delay={0.14}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
-              JBAR Design Studio is a small independent web studio based on
-              Chicago&apos;s North Side. We build websites for independent
+              JBAR Design Studio is an independent web practice based on
+              Chicago&apos;s North Side. I build websites for independent
               businesses who&apos;d rather run their business than wrestle with
               Wix.
             </p>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
-              We work with one client at a time. Every site is built from
+              I work with one client at a time. Every site is built from
               scratch — no templates, no themes, no page builders. The result is
               a site that looks like your business, not like everyone
-              else&apos;s. We keep the price flat and the timeline short because
+              else&apos;s. I keep the price flat and the timeline short because
               that&apos;s what independent business owners actually need.
             </p>
           </Reveal>
           <Reveal delay={0.26}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
               If you run an independent business in Chicago and you&apos;ve been
-              meaning to get a real website, that&apos;s why we exist.
+              meaning to get a real website, that&apos;s what JBAR is for.
             </p>
           </Reveal>
         </div>

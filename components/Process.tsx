@@ -9,17 +9,17 @@ const steps = [
   {
     number: "02",
     title: "Design",
-    desc: "First draft within 3 days. You'll see the full site — desktop and mobile — before we write a line of code.",
+    desc: "First draft within 3 days. You'll see the full site — desktop and mobile — before I write a line of code.",
   },
   {
     number: "03",
     title: "Build",
-    desc: "One round of revisions on the design, then we build. No feature creep. No moving targets.",
+    desc: "One round of revisions on the design, then I build. No feature creep. No moving targets.",
   },
   {
     number: "04",
     title: "Launch",
-    desc: "Live on your domain, fully working. We handle the deployment so you don't have to.",
+    desc: "Live on your domain, fully working. I handle the deployment so you don't have to.",
   },
 ];
 

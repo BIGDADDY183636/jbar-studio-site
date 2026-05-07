@@ -93,7 +93,7 @@ export default function WhatYouGet() {
 
             <Reveal delay={0.4}>
               <p className="mt-10 font-sans text-[0.82rem] text-muted leading-relaxed max-w-xs">
-                We&apos;re clear about scope so you get a faster site and no
+                I&apos;m clear about scope so you get a faster site and no
                 awkward conversations halfway through.
               </p>
             </Reveal>
