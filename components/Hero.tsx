@@ -1,22 +1,83 @@
-// No client logic needed — pure CSS animations.
+"use client";
 
-const WORDMARK = [
-  { letter: "J", color: "#d63031",              delay: "200ms" },
-  { letter: "B", color: "rgba(244,241,234,0.85)", delay: "400ms" },
-  { letter: "A", color: "rgba(244,241,234,0.85)", delay: "600ms" },
-  { letter: "R", color: "rgba(244,241,234,0.85)", delay: "800ms" },
-];
+import { useEffect, useState } from "react";
 
-const letterStyle = (color: string, delay: string): React.CSSProperties => ({
-  fontFamily: "var(--font-inter), sans-serif",
-  fontWeight: 900,
-  fontSize: "clamp(120px, 22vw, 280px)",
-  letterSpacing: "-0.04em",
-  color,
-  animationDelay: delay,
-});
+const LETTERS = ["J", "B", "A", "R"] as const;
+const DIGIT_MS = 80;   // ms between digit steps
+const MORPH_MS = 500;  // CSS morph animation duration
+const J_START  = 200;  // ms from mount before J begins counting
+
+type Phase = "empty" | "counting" | "locked" | "morphed";
+
+// Absolute ms from mount when each letter begins its count.
+// Each letter starts only after the previous letter's morph completes.
+// 9 digits × 80ms = 720ms counting, + 500ms morph = 1220ms per letter.
+const STARTS: number[] = LETTERS.reduce<number[]>(
+  (acc, _, i) =>
+    i === 0 ? [J_START] : [...acc, acc[i - 1] + 9 * DIGIT_MS + MORPH_MS],
+  []
+);
+// J:200  B:1420  A:2640  R:3860
+
+const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400; // ~5480ms
 
 export default function Hero() {
+  // SSR: render "JBAR" in mono so server/client HTML matches.
+  // useEffect resets to empty immediately on mount before the count begins.
+  const [chars, setChars] = useState<string[]>(["J", "B", "A", "R"]);
+  const [phases, setPhases] = useState<Phase[]>([
+    "counting", "counting", "counting", "counting",
+  ]);
+  const [showSub, setShowSub] = useState(false);
+
+  useEffect(() => {
+    // Reset to empty — count-up begins from a blank slate
+    setChars([" ", " ", " ", " "]);
+    setPhases(["empty", "empty", "empty", "empty"]);
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    LETTERS.forEach((letter, li) => {
+      const t0 = STARTS[li];
+
+      // Digits 1 → 9, one per DIGIT_MS
+      for (let d = 1; d <= 9; d++) {
+        timers.push(
+          setTimeout(() => {
+            setChars((p) => p.map((c, i) => (i === li ? String(d) : c)));
+            setPhases((p) =>
+              p.map((ph, i) => (i === li ? "counting" : ph)) as Phase[]
+            );
+          }, t0 + (d - 1) * DIGIT_MS)
+        );
+      }
+
+      // Snap to letter + trigger CSS morph animation
+      const snapAt = t0 + 9 * DIGIT_MS;
+      timers.push(
+        setTimeout(() => {
+          setChars((p) => p.map((c, i) => (i === li ? letter : c)));
+          setPhases((p) =>
+            p.map((ph, i) => (i === li ? "locked" : ph)) as Phase[]
+          );
+        }, snapAt)
+      );
+
+      // Morph complete — remove .letter-morph class (forwards fill keeps final state)
+      timers.push(
+        setTimeout(() => {
+          setPhases((p) =>
+            p.map((ph, i) => (i === li ? "morphed" : ph)) as Phase[]
+          );
+        }, snapAt + MORPH_MS)
+      );
+    });
+
+    timers.push(setTimeout(() => setShowSub(true), SUB_REVEAL));
+
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
     <section
       id="hero"
@@ -71,28 +132,46 @@ export default function Hero() {
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* JBAR Wordmark — letters drop in with spring bounce, staggered */}
-        {/* overflow-hidden clips letters above the row until they enter */}
+        {/* JBAR Wordmark — sequential count-up → snap → bounce-morph */}
         <div
-          className="flex items-end justify-center overflow-hidden select-none"
+          className="flex items-end justify-center select-none"
           style={{ lineHeight: 0.85 }}
         >
-          {WORDMARK.map(({ letter, color, delay }) => (
-            <span
-              key={letter}
-              className="letter-drop"
-              style={letterStyle(color, delay)}
-            >
-              {letter}
-            </span>
-          ))}
+          {LETTERS.map((letter, i) => {
+            const phase = phases[i];
+            const isMorphed = phase === "locked" || phase === "morphed";
+            return (
+              <span
+                key={letter}
+                className={phase === "locked" ? "letter-morph" : ""}
+                style={{
+                  display: "inline-block",
+                  fontFamily: isMorphed
+                    ? "var(--font-inter), sans-serif"
+                    : "var(--font-mono), monospace",
+                  fontWeight: isMorphed ? 900 : 500,
+                  fontSize: isMorphed
+                    ? "clamp(120px, 22vw, 280px)"
+                    : "clamp(88px, 16vw, 200px)",
+                  letterSpacing: isMorphed ? "-0.04em" : "0.01em",
+                  color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
+                  opacity: phase === "empty" ? 0 : 1,
+                  willChange: "transform",
+                }}
+              >
+                {chars[i]}
+              </span>
+            );
+          })}
         </div>
 
-        {/* Subheadline, pricing, CTA */}
+        {/* Subheadline, pricing, CTA — fade in after R's morph + 400ms */}
         <div
           style={{
-            animation:
-              "heroFadeUp 700ms cubic-bezier(0.16,1,0.3,1) 1400ms both",
+            opacity: showSub ? 1 : 0,
+            transform: showSub ? "translateY(0)" : "translateY(16px)",
+            transition:
+              "opacity 700ms cubic-bezier(0.16,1,0.3,1), transform 700ms cubic-bezier(0.16,1,0.3,1)",
           }}
         >
           <h1
@@ -125,7 +204,10 @@ export default function Hero() {
         {/* Bottom rule */}
         <div
           className="mt-20 w-full h-px bg-paper/[0.07]"
-          style={{ animation: "heroFadeIn 600ms ease 1800ms both" }}
+          style={{
+            opacity: showSub ? 1 : 0,
+            transition: "opacity 600ms ease 400ms",
+          }}
         />
       </div>
     </section>
