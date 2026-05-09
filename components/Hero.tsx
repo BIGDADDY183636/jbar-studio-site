@@ -3,9 +3,9 @@
 import { memo, useEffect, useRef, useState } from "react";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
-const DIGIT_MS = 70;   // ms between digit steps
-const MORPH_MS = 500;  // CSS morph animation duration
-const J_START  = 200;  // ms from mount before J begins counting
+const DIGIT_MS = 70;
+const MORPH_MS = 500;
+const J_START  = 200;
 const STAGGER  = 6 * DIGIT_MS;
 
 type Phase = "empty" | "counting" | "locked" | "morphed";
@@ -15,7 +15,6 @@ const STARTS: number[] = LETTERS.reduce<number[]>(
     i === 0 ? [J_START] : [...acc, acc[i - 1] + STAGGER],
   []
 );
-// @ DIGIT_MS=70: J:200  B:620  A:1040  R:1460
 
 const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
@@ -31,31 +30,25 @@ const LetterSlot = memo(
     phase: Phase;
     isRed: boolean;
     slotRef: (el: HTMLSpanElement | null) => void;
-  }) => {
-    const isMorphed = phase === "locked" || phase === "morphed";
-    return (
-      <span
-        ref={slotRef}
-        className={phase === "locked" ? "letter-morph" : ""}
-        style={{
-          display: "inline-block",
-          fontFamily: isMorphed
-            ? "var(--font-inter), sans-serif"
-            : "var(--font-mono), monospace",
-          fontWeight: isMorphed ? 900 : 500,
-          fontSize: isMorphed
-            ? "clamp(120px, 22vw, 280px)"
-            : "clamp(88px, 16vw, 200px)",
-          letterSpacing: isMorphed ? "-0.04em" : "0.01em",
-          color: isRed ? "#d63031" : "rgba(244,241,234,0.85)",
-          opacity: phase === "empty" ? 0 : 1,
-          willChange: "transform",
-        }}
-      >
-        {char}
-      </span>
-    );
-  },
+  }) => (
+    <span
+      ref={slotRef}
+      className={phase === "locked" ? "letter-morph" : ""}
+      style={{
+        display: "inline-block",
+        fontFamily: "var(--font-inter), sans-serif",
+        fontWeight: 900,
+        fontSize: "clamp(120px, 22vw, 280px)",
+        letterSpacing: "-0.04em",
+        color: isRed ? "#d63031" : "rgba(244,241,234,0.85)",
+        opacity: phase === "empty" ? 0 : 1,
+        willChange: "transform",
+        transform: "translateZ(0)",
+      }}
+    >
+      {char}
+    </span>
+  ),
   (prev, next) => prev.phase === next.phase && prev.char === next.char
 );
 LetterSlot.displayName = "LetterSlot";
@@ -75,25 +68,18 @@ export default function Hero() {
   );
 
   useEffect(() => {
-    console.log("[Hero] mount fired");
-
     let rafId: number;
     const timers: ReturnType<typeof setTimeout>[] = [];
 
-    // Wrap in RAF — Safari is more reliable starting timers after a paint
     rafId = requestAnimationFrame(() => {
-      console.log("[Hero] RAF fired — starting animation");
-
       setChars([" ", " ", " ", " "]);
       setPhases(["empty", "empty", "empty", "empty"]);
 
       LETTERS.forEach((letter, li) => {
         const t0 = STARTS[li];
 
-        // Digit 1 + phase start: one React re-render
         timers.push(
           setTimeout(() => {
-            console.log(`[Hero] ${letter} counting start`);
             setChars((p) => p.map((c, i) => (i === li ? "1" : c)));
             setPhases((p) =>
               p.map((ph, i) => (i === li ? "counting" : ph)) as Phase[]
@@ -101,7 +87,6 @@ export default function Hero() {
           }, t0)
         );
 
-        // Digits 2–9: direct DOM, no re-render (LetterSlot memoized)
         for (let d = 2; d <= 9; d++) {
           timers.push(
             setTimeout(() => {
@@ -111,11 +96,9 @@ export default function Hero() {
           );
         }
 
-        // Snap → letter + morph
         const snapAt = t0 + 9 * DIGIT_MS;
         timers.push(
           setTimeout(() => {
-            console.log(`[Hero] ${letter} snap`);
             setChars((p) => p.map((c, i) => (i === li ? letter : c)));
             setPhases((p) =>
               p.map((ph, i) => (i === li ? "locked" : ph)) as Phase[]
@@ -123,7 +106,6 @@ export default function Hero() {
           }, snapAt)
         );
 
-        // Morph done
         timers.push(
           setTimeout(() => {
             setPhases((p) =>
@@ -259,39 +241,6 @@ export default function Hero() {
             transition: "opacity 600ms ease 400ms",
           }}
         />
-      </div>
-
-      {/* ── iOS DEBUG OVERLAY — remove after testing ────────────────────────
-          Shows live animation state on-screen so you can read it on iPhone.
-          Phase codes: E=empty C=counting L=locked M=morphed                */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "12px",
-          left: "12px",
-          zIndex: 9999,
-          background: "rgba(0,0,0,0.88)",
-          color: "#00ff88",
-          fontFamily: "monospace",
-          fontSize: "12px",
-          lineHeight: 1.7,
-          padding: "8px 12px",
-          borderRadius: "6px",
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      >
-        <div style={{ color: "#ff6b6b", marginBottom: "2px" }}>
-          ▶ HERO DEBUG
-        </div>
-        <div>
-          phases:{" "}
-          {phases
-            .map((p, i) => `${LETTERS[i]}:${p[0].toUpperCase()}`)
-            .join("  ")}
-        </div>
-        <div>chars: [{chars.join("")}]</div>
-        <div>sub: {showSub ? "✓" : "—"}</div>
       </div>
     </section>
   );
