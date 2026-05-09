@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
-const DIGIT_MS = 80;   // ms between digit steps
+const DIGIT_MS = 50;   // ms between digit steps
 const MORPH_MS = 500;  // CSS morph animation duration
 const J_START  = 200;  // ms from mount before J begins counting
 
