@@ -54,9 +54,11 @@ const LetterSlot = memo(
 LetterSlot.displayName = "LetterSlot";
 
 export default function Hero() {
+  // chars="JBAR" gives SSR the text for accessibility/SEO.
+  // phases="empty" means opacity:0 — no flash before the animation starts.
   const [chars, setChars] = useState<string[]>(["J", "B", "A", "R"]);
   const [phases, setPhases] = useState<Phase[]>([
-    "counting", "counting", "counting", "counting",
+    "empty", "empty", "empty", "empty",
   ]);
   const [showSub, setShowSub] = useState(false);
 
@@ -72,9 +74,7 @@ export default function Hero() {
     const timers: ReturnType<typeof setTimeout>[] = [];
 
     rafId = requestAnimationFrame(() => {
-      setChars([" ", " ", " ", " "]);
-      setPhases(["empty", "empty", "empty", "empty"]);
-
+      // Initial state is already "empty" — just start the timers.
       LETTERS.forEach((letter, li) => {
         const t0 = STARTS[li];
 
