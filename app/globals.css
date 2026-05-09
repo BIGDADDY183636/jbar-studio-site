@@ -69,14 +69,24 @@
   animation: pulse-line 5s ease-in-out infinite;
 }
 
-/* ── Hero wordmark morph (Phase 3 spring bounce) ───── */
-@keyframes letterMorph {
-  0%   { transform: translateY(-12%) scale(1); }
-  60%  { transform: translateY(4%) scale(1.04); }
-  100% { transform: translateY(0) scale(1); }
+/* ── Hero wordmark drop-in ──────────────────────────── */
+@keyframes letterDrop {
+  0%   { transform: translateY(-200%); opacity: 0; }
+  100% { transform: translateY(0);     opacity: 1; }
 }
-.letter-morph {
-  animation: letterMorph 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.letter-drop {
+  display: inline-block;
+  animation: letterDrop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── Hero supporting element reveals ────────────────── */
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Section counter — hidden on small screens ──────── */

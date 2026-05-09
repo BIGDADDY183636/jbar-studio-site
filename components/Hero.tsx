@@ -1,74 +1,22 @@
-"use client";
+// No client logic needed — pure CSS animations.
 
-import { useEffect, useRef, useState } from "react";
+const WORDMARK = [
+  { letter: "J", color: "#d63031",              delay: "200ms" },
+  { letter: "B", color: "rgba(244,241,234,0.85)", delay: "400ms" },
+  { letter: "A", color: "rgba(244,241,234,0.85)", delay: "600ms" },
+  { letter: "R", color: "rgba(244,241,234,0.85)", delay: "800ms" },
+];
 
-const LETTERS = ["J", "B", "A", "R"] as const;
-const LOCK_TIMES = [700, 950, 1200, 1450] as const;
-const MORPH_TIME = 1700;
-const SUBHEAD_TIME = 2400;
-const DIGITS = "0123456789";
-
-type LetterPhase = "scrambling" | "locked" | "morphed";
-
-function randDigit() {
-  return DIGITS[Math.floor(Math.random() * 10)];
-}
+const letterStyle = (color: string, delay: string): React.CSSProperties => ({
+  fontFamily: "var(--font-inter), sans-serif",
+  fontWeight: 900,
+  fontSize: "clamp(120px, 22vw, 280px)",
+  letterSpacing: "-0.04em",
+  color,
+  animationDelay: delay,
+});
 
 export default function Hero() {
-  // Initialize to "JBAR" so server and client render identical HTML.
-  // useEffect immediately kicks off the scramble — no hydration mismatch.
-  const [chars, setChars] = useState<string[]>(["J", "B", "A", "R"]);
-  const [phases, setPhases] = useState<LetterPhase[]>([
-    "scrambling", "scrambling", "scrambling", "scrambling",
-  ]);
-  const [showSub, setShowSub] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  const lockedRef = useRef([false, false, false, false]);
-
-  useEffect(() => {
-    setMounted(true);
-
-    // Immediately replace JBAR with random digits to start the scramble
-    setChars([randDigit(), randDigit(), randDigit(), randDigit()]);
-
-    const interval = setInterval(() => {
-      setChars(
-        LETTERS.map((letter, i) =>
-          lockedRef.current[i] ? letter : randDigit()
-        )
-      );
-    }, 70);
-
-    const lockTimers = LOCK_TIMES.map((t, i) =>
-      setTimeout(() => {
-        console.log(`[Hero] lock ${LETTERS[i]} at ${t}ms`);
-        lockedRef.current[i] = true;
-        setPhases((prev) =>
-          prev.map((p, j) => (j === i ? "locked" : p)) as LetterPhase[]
-        );
-      }, t)
-    );
-
-    const morphTimer = setTimeout(() => {
-      console.log("[Hero] morph triggered at 1700ms");
-      // Clear interval BEFORE updating phases so no stray tick overwrites chars
-      clearInterval(interval);
-      setPhases(["morphed", "morphed", "morphed", "morphed"]);
-    }, MORPH_TIME);
-
-    const subTimer = setTimeout(() => {
-      setShowSub(true);
-    }, SUBHEAD_TIME);
-
-    return () => {
-      clearInterval(interval);
-      lockTimers.forEach(clearTimeout);
-      clearTimeout(morphTimer);
-      clearTimeout(subTimer);
-    };
-  }, []);
-
   return (
     <section
       id="hero"
@@ -107,10 +55,7 @@ export default function Hero() {
         {/* Booking status pill */}
         <div
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red/[0.07] border border-red/20 mb-8"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transition: "opacity 600ms ease 200ms",
-          }}
+          style={{ animation: "heroFadeIn 600ms ease 100ms both" }}
         >
           <div className="w-1.5 h-1.5 rounded-full bg-red animate-pulse flex-shrink-0" />
           <span className="font-mono text-[0.56rem] tracking-[0.2em] uppercase text-red/70">
@@ -121,52 +66,33 @@ export default function Hero() {
         {/* Studio label */}
         <p
           className="font-mono text-[0.6rem] tracking-[0.28em] uppercase text-muted mb-10"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transition: "opacity 600ms ease 400ms",
-          }}
+          style={{ animation: "heroFadeIn 600ms ease 300ms both" }}
         >
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* JBAR Wordmark — Variant O */}
+        {/* JBAR Wordmark — letters drop in with spring bounce, staggered */}
+        {/* overflow-hidden clips letters above the row until they enter */}
         <div
-          className="flex items-end justify-center select-none"
+          className="flex items-end justify-center overflow-hidden select-none"
           style={{ lineHeight: 0.85 }}
         >
-          {LETTERS.map((letter, i) => {
-            const isMorphed = phases[i] === "morphed";
-            return (
-              <span
-                key={letter}
-                className={isMorphed ? "letter-morph" : ""}
-                style={{
-                  display: "inline-block",
-                  fontFamily: isMorphed
-                    ? "var(--font-inter), sans-serif"
-                    : "var(--font-mono), monospace",
-                  fontWeight: isMorphed ? 900 : 500,
-                  fontSize: isMorphed
-                    ? "clamp(120px, 22vw, 280px)"
-                    : "clamp(88px, 16vw, 200px)",
-                  letterSpacing: isMorphed ? "-0.04em" : "0.01em",
-                  color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
-                  willChange: "transform",
-                }}
-              >
-                {chars[i]}
-              </span>
-            );
-          })}
+          {WORDMARK.map(({ letter, color, delay }) => (
+            <span
+              key={letter}
+              className="letter-drop"
+              style={letterStyle(color, delay)}
+            >
+              {letter}
+            </span>
+          ))}
         </div>
 
-        {/* Subheadline, pricing, CTA — fade in after morph */}
+        {/* Subheadline, pricing, CTA */}
         <div
           style={{
-            opacity: showSub ? 1 : 0,
-            transform: showSub ? "translateY(0)" : "translateY(16px)",
-            transition:
-              "opacity 700ms cubic-bezier(0.16,1,0.3,1), transform 700ms cubic-bezier(0.16,1,0.3,1)",
+            animation:
+              "heroFadeUp 700ms cubic-bezier(0.16,1,0.3,1) 1400ms both",
           }}
         >
           <h1
@@ -199,10 +125,7 @@ export default function Hero() {
         {/* Bottom rule */}
         <div
           className="mt-20 w-full h-px bg-paper/[0.07]"
-          style={{
-            opacity: showSub ? 1 : 0,
-            transition: "opacity 600ms ease 400ms",
-          }}
+          style={{ animation: "heroFadeIn 600ms ease 1800ms both" }}
         />
       </div>
     </section>
