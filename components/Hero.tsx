@@ -43,7 +43,6 @@ const LetterSlot = memo(
         color: isRed ? "#d63031" : "rgba(244,241,234,0.85)",
         opacity: phase === "empty" ? 0 : 1,
         willChange: "transform",
-        transform: "translateZ(0)",
       }}
     >
       {char}
