@@ -6,9 +6,9 @@ const LETTERS = ["J", "B", "A", "R"] as const;
 const DIGIT_MS = 50;   // ms between digit steps
 const MORPH_MS = 500;  // CSS morph animation duration
 const J_START  = 200;  // ms from mount before J begins counting
-// Next letter starts when the previous letter shows "5" (i.e. 4 steps in).
+// Next letter starts when the previous letter shows "7" (i.e. 6 steps in).
 // Keeping this derived means it stays correct if DIGIT_MS changes.
-const STAGGER  = 4 * DIGIT_MS;
+const STAGGER  = 6 * DIGIT_MS;
 
 type Phase = "empty" | "counting" | "locked" | "morphed";
 
@@ -19,7 +19,7 @@ const STARTS: number[] = LETTERS.reduce<number[]>(
     i === 0 ? [J_START] : [...acc, acc[i - 1] + STAGGER],
   []
 );
-// @ DIGIT_MS=50: J:200  B:400  A:600  R:800
+// @ DIGIT_MS=50: J:200  B:500  A:800  R:1100
 
 const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
