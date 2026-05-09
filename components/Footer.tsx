@@ -6,7 +6,7 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-canvas-alt border-t border-paper/[0.06] py-14 px-6">
+    <footer className="bg-canvas-alt py-14 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
           {/* Brand — Inter 900 wordmark */}

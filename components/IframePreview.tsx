@@ -63,7 +63,15 @@ export default function IframePreview({ src, title, className = "" }: Props) {
             pointerEvents: "none",
           }}
         />
-        {/* Hover: red ring only — no text badge (avoids duplicate CTA) */}
+        {/* Hover: subtle radial gradient overlay */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[2px] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(214,48,49,0.18) 0%, transparent 68%)",
+          }}
+        />
+        {/* Hover: red ring */}
         <div className="absolute inset-0 ring-2 ring-inset ring-transparent group-hover:ring-red/50 transition-all duration-300 rounded-[2px] pointer-events-none" />
       </div>
     </a>

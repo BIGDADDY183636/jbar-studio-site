@@ -1,23 +1,66 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const LETTERS = ["J", "B", "A", "R"] as const;
+const LOCK_TIMES = [700, 950, 1200, 1450];
+const MORPH_TIME = 1700;
+const SUBHEAD_TIME = 2400;
+const DIGITS = "0123456789";
+
+type LetterPhase = "scrambling" | "locked" | "morphed";
 
 export default function Hero() {
+  const lockedRef = useRef([false, false, false, false]);
+  const [phases, setPhases] = useState<LetterPhase[]>([
+    "scrambling", "scrambling", "scrambling", "scrambling",
+  ]);
+  const [chars, setChars] = useState(["4", "7", "2", "9"]);
+  const [showSub, setShowSub] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(t);
+    setMounted(true);
+
+    const interval = setInterval(() => {
+      setChars((prev) =>
+        prev.map((_, i) =>
+          lockedRef.current[i]
+            ? LETTERS[i]
+            : DIGITS[Math.floor(Math.random() * 10)]
+        )
+      );
+    }, 70);
+
+    const lockTimers = LOCK_TIMES.map((t, i) =>
+      setTimeout(() => {
+        lockedRef.current[i] = true;
+        setPhases((prev) =>
+          prev.map((p, j) => (j === i ? "locked" : p)) as LetterPhase[]
+        );
+      }, t)
+    );
+
+    const morphTimer = setTimeout(() => {
+      setPhases(["morphed", "morphed", "morphed", "morphed"]);
+      clearInterval(interval);
+    }, MORPH_TIME);
+
+    const subTimer = setTimeout(() => setShowSub(true), SUBHEAD_TIME);
+
+    return () => {
+      clearInterval(interval);
+      lockTimers.forEach(clearTimeout);
+      clearTimeout(morphTimer);
+      clearTimeout(subTimer);
+    };
   }, []);
 
-  const reveal = (delayMs: number, durationMs = 700): React.CSSProperties => ({
-    opacity: mounted ? 1 : 0,
-    transform: mounted ? "translateY(0px)" : "translateY(20px)",
-    transition: `opacity ${durationMs}ms cubic-bezier(0.16,1,0.3,1) ${delayMs}ms, transform ${durationMs}ms cubic-bezier(0.16,1,0.3,1) ${delayMs}ms`,
-  });
-
   return (
-    <section className="relative min-h-[88vh] flex flex-col items-center justify-center bg-canvas overflow-hidden">
+    <section
+      id="hero"
+      className="relative min-h-[88vh] flex flex-col items-center justify-center bg-canvas overflow-hidden"
+    >
       {/* Ambient gradient blobs */}
       <div
         aria-hidden="true"
@@ -47,13 +90,14 @@ export default function Hero() {
         />
       </div>
 
-      {/* Content — centered */}
       <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-20 w-full text-center">
-
         {/* Booking status pill */}
         <div
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red/[0.07] border border-red/20 mb-8"
-          style={reveal(80)}
+          style={{
+            opacity: mounted ? 1 : 0,
+            transition: "opacity 600ms ease 200ms",
+          }}
         >
           <div className="w-1.5 h-1.5 rounded-full bg-red animate-pulse flex-shrink-0" />
           <span className="font-mono text-[0.56rem] tracking-[0.2em] uppercase text-red/70">
@@ -64,48 +108,89 @@ export default function Hero() {
         {/* Studio label */}
         <p
           className="font-mono text-[0.6rem] tracking-[0.28em] uppercase text-muted mb-10"
-          style={reveal(200)}
+          style={{
+            opacity: mounted ? 1 : 0,
+            transition: "opacity 600ms ease 400ms",
+          }}
         >
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* Headline */}
-        <h1
-          className="font-sans font-black text-paper mx-auto"
+        {/* JBAR Wordmark — Variant O animation */}
+        <div
+          className="flex items-end justify-center select-none"
+          style={{ lineHeight: 0.85 }}
+        >
+          {LETTERS.map((letter, i) => {
+            const isMorphed = phases[i] === "morphed";
+            return (
+              <span
+                key={letter}
+                className={isMorphed ? "letter-morph" : ""}
+                style={{
+                  display: "inline-block",
+                  fontFamily: isMorphed
+                    ? "var(--font-inter), sans-serif"
+                    : "var(--font-mono), monospace",
+                  fontWeight: isMorphed ? 900 : 500,
+                  fontSize: isMorphed
+                    ? "clamp(120px, 22vw, 280px)"
+                    : "clamp(88px, 16vw, 200px)",
+                  letterSpacing: isMorphed ? "-0.04em" : "0.01em",
+                  color:
+                    i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
+                  willChange: "transform",
+                }}
+              >
+                {chars[i]}
+              </span>
+            );
+          })}
+        </div>
+
+        {/* Subheadline, pricing, CTA — fade in after all letters morph */}
+        <div
           style={{
-            fontSize: "clamp(3rem, 6vw, 6.4rem)",
-            lineHeight: 1.0,
-            letterSpacing: "-0.03em",
-            maxWidth: "18ch",
-            ...reveal(360, 950),
+            opacity: showSub ? 1 : 0,
+            transform: showSub ? "translateY(0)" : "translateY(16px)",
+            transition:
+              "opacity 700ms cubic-bezier(0.16,1,0.3,1), transform 700ms cubic-bezier(0.16,1,0.3,1)",
           }}
         >
-          Custom websites for Chicago&apos;s independent businesses.
-        </h1>
-
-        {/* Red pricing line */}
-        <p
-          className="font-mono text-[0.78rem] text-red mt-8 tracking-[0.18em] uppercase"
-          style={reveal(680)}
-        >
-          $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Live forever
-        </p>
-
-        {/* CTA */}
-        <div className="flex justify-center mt-10" style={reveal(880)}>
-          <a
-            href="#contact"
-            className="btn-glow inline-flex items-center gap-2 font-sans text-[0.75rem] font-semibold tracking-[0.12em] uppercase bg-red text-paper px-7 py-3.5 rounded-full"
+          <h1
+            className="font-sans font-black text-paper mx-auto mt-8"
+            style={{
+              fontSize: "clamp(1.4rem, 3vw, 2.4rem)",
+              letterSpacing: "-0.025em",
+              maxWidth: "22ch",
+              lineHeight: 1.15,
+            }}
           >
-            Let&apos;s talk
-            <span className="inline-block">→</span>
-          </a>
+            Custom websites for Chicago&apos;s independent businesses.
+          </h1>
+
+          <p className="font-mono text-[0.78rem] text-red mt-6 tracking-[0.18em] uppercase">
+            $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Live forever
+          </p>
+
+          <div className="flex justify-center mt-8">
+            <a
+              href="#contact"
+              className="btn-glow inline-flex items-center gap-2 font-sans text-[0.75rem] font-semibold tracking-[0.12em] uppercase bg-red text-paper px-7 py-3.5 rounded-full"
+            >
+              Let&apos;s talk
+              <span className="inline-block">→</span>
+            </a>
+          </div>
         </div>
 
         {/* Bottom rule */}
         <div
           className="mt-20 w-full h-px bg-paper/[0.07]"
-          style={reveal(1080, 600)}
+          style={{
+            opacity: showSub ? 1 : 0,
+            transition: "opacity 600ms ease 400ms",
+          }}
         />
       </div>
     </section>

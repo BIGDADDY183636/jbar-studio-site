@@ -3,25 +3,64 @@
 import { useState } from "react";
 import Reveal from "@/components/Reveal";
 
-// Formspree endpoint — do not change
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwvyollb";
+
+const STYLE_PILLS = [
+  "Modern", "Classic", "Bold", "Minimal", "Editorial",
+  "Playful", "Industrial", "Warm", "Not Sure",
+];
+const BUSINESS_TYPES = [
+  "Café / Restaurant",
+  "Retail Shop",
+  "Auto & Repair",
+  "Hair & Salon",
+  "Fitness & Gym",
+  "Bookstore",
+  "Professional Services",
+  "Other",
+];
+const BUDGETS = [
+  "$400 — Standard package",
+  "~$600 — With add-ons",
+  "Let's discuss",
+];
+const TIMELINES = ["ASAP", "2–4 weeks", "1–2 months", "No rush / flexible"];
 
 type Status = "idle" | "sending" | "sent" | "error";
 
+const inputCls =
+  "w-full bg-canvas border border-paper/[0.1] rounded-sm px-4 py-3 font-sans text-[0.88rem] text-paper placeholder-paper/20 focus:outline-none focus:border-red transition-colors duration-200";
+const labelCls =
+  "block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2";
+
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
+  const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
+  const [hasAssets, setHasAssets] = useState(false);
+
+  function toggleStyle(pill: string) {
+    setSelectedStyles((prev) =>
+      prev.includes(pill) ? prev.filter((p) => p !== pill) : [...prev, pill]
+    );
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
     try {
+      const formData = new FormData(e.currentTarget);
+      selectedStyles.forEach((s) => formData.append("style_preference", s));
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        body: new FormData(e.currentTarget),
+        body: formData,
         headers: { Accept: "application/json" },
       });
       setStatus(res.ok ? "sent" : "error");
-      if (res.ok) (e.target as HTMLFormElement).reset();
+      if (res.ok) {
+        (e.target as HTMLFormElement).reset();
+        setSelectedStyles([]);
+        setHasAssets(false);
+      }
     } catch {
       setStatus("error");
     }
@@ -30,7 +69,6 @@ export default function Contact() {
   return (
     <section id="contact" className="bg-canvas border-t border-red/20 py-28">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Centered label */}
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-12">
             <span className="text-red">[ </span>
@@ -70,7 +108,7 @@ export default function Contact() {
             </Reveal>
           </div>
 
-          {/* Right: form — Formspree logic unchanged */}
+          {/* Right: form */}
           <Reveal delay={0.14} duration={800}>
             <div>
               {status === "sent" ? (
@@ -89,33 +127,182 @@ export default function Contact() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Name */}
                   <div>
-                    <label className="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2">
-                      Name
-                    </label>
+                    <label className={labelCls}>Name</label>
                     <input
                       type="text"
                       name="name"
                       required
                       placeholder="Your name"
-                      className="w-full bg-transparent border border-paper/[0.1] rounded-sm px-4 py-3 font-sans text-[0.88rem] text-paper placeholder-paper/20 focus:outline-none focus:border-red transition-colors duration-200"
+                      className={inputCls}
                     />
                   </div>
+
                   {/* Email */}
                   <div>
-                    <label className="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2">
-                      Email
-                    </label>
+                    <label className={labelCls}>Email</label>
                     <input
                       type="email"
                       name="email"
                       required
                       placeholder="you@yourbusiness.com"
-                      className="w-full bg-transparent border border-paper/[0.1] rounded-sm px-4 py-3 font-sans text-[0.88rem] text-paper placeholder-paper/20 focus:outline-none focus:border-red transition-colors duration-200"
+                      className={inputCls}
                     />
                   </div>
+
+                  {/* Business name */}
+                  <div>
+                    <label className={labelCls}>Business name</label>
+                    <input
+                      type="text"
+                      name="business_name"
+                      required
+                      placeholder="Your business name"
+                      className={inputCls}
+                    />
+                  </div>
+
+                  {/* Business type */}
+                  <div>
+                    <label className={labelCls}>Type of business</label>
+                    <select
+                      name="business_type"
+                      required
+                      defaultValue=""
+                      className={inputCls + " appearance-none cursor-pointer"}
+                    >
+                      <option value="" disabled>
+                        Select one...
+                      </option>
+                      {BUSINESS_TYPES.map((t) => (
+                        <option
+                          key={t}
+                          value={t}
+                          style={{ background: "#0a0908", color: "#f4f1ea" }}
+                        >
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Style preferences */}
+                  <div>
+                    <label className={labelCls}>
+                      Style preferences{" "}
+                      <span className="text-paper/20 normal-case tracking-normal">
+                        (pick any)
+                      </span>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {STYLE_PILLS.map((pill) => {
+                        const selected = selectedStyles.includes(pill);
+                        return (
+                          <button
+                            key={pill}
+                            type="button"
+                            onClick={() => toggleStyle(pill)}
+                            className="font-mono text-[0.55rem] tracking-[0.14em] uppercase px-3 py-1.5 rounded-full border transition-all duration-150"
+                            style={{
+                              borderColor: selected
+                                ? "#d63031"
+                                : "rgba(244,241,234,0.15)",
+                              color: selected
+                                ? "#d63031"
+                                : "rgba(244,241,234,0.45)",
+                              background: selected
+                                ? "rgba(214,48,49,0.08)"
+                                : "transparent",
+                            }}
+                          >
+                            {pill}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {selectedStyles.map((s) => (
+                      <input
+                        key={s}
+                        type="hidden"
+                        name="style_preference"
+                        value={s}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Budget */}
+                  <div>
+                    <label className={labelCls}>Budget range</label>
+                    <select
+                      name="budget"
+                      required
+                      defaultValue=""
+                      className={inputCls + " appearance-none cursor-pointer"}
+                    >
+                      <option value="" disabled>
+                        Select one...
+                      </option>
+                      {BUDGETS.map((b) => (
+                        <option
+                          key={b}
+                          value={b}
+                          style={{ background: "#0a0908", color: "#f4f1ea" }}
+                        >
+                          {b}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Timeline */}
+                  <div>
+                    <label className={labelCls}>Timeline</label>
+                    <select
+                      name="timeline"
+                      required
+                      defaultValue=""
+                      className={inputCls + " appearance-none cursor-pointer"}
+                    >
+                      <option value="" disabled>
+                        Select one...
+                      </option>
+                      {TIMELINES.map((t) => (
+                        <option
+                          key={t}
+                          value={t}
+                          style={{ background: "#0a0908", color: "#f4f1ea" }}
+                        >
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Logo/brand assets checkbox */}
+                  <div>
+                    <label className="flex items-start gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        name="has_brand_assets"
+                        checked={hasAssets}
+                        onChange={(e) => setHasAssets(e.target.checked)}
+                        className="mt-0.5 flex-shrink-0 accent-red"
+                        value="yes"
+                      />
+                      <span className="font-mono text-[0.58rem] tracking-[0.14em] uppercase text-paper/40 leading-relaxed group-hover:text-paper/60 transition-colors">
+                        I have a logo or brand images to share
+                      </span>
+                    </label>
+                    {hasAssets && (
+                      <p className="mt-2 ml-6 font-sans text-[0.75rem] text-muted leading-relaxed">
+                        Great — I&apos;ll send a file-share link after we
+                        connect.
+                      </p>
+                    )}
+                  </div>
+
                   {/* Message */}
                   <div>
-                    <label className="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2">
+                    <label className={labelCls}>
                       Tell me about your business
                     </label>
                     <textarea
@@ -123,17 +310,21 @@ export default function Contact() {
                       required
                       rows={4}
                       placeholder="What you do, who you're trying to reach, what you have now..."
-                      className="w-full bg-transparent border border-paper/[0.1] rounded-sm px-4 py-3 font-sans text-[0.88rem] text-paper placeholder-paper/20 focus:outline-none focus:border-red transition-colors duration-200 resize-none"
+                      className={inputCls + " resize-none"}
                     />
                   </div>
+
                   {/* Submit */}
                   <button
                     type="submit"
                     disabled={status === "sending"}
                     className="btn-glow w-full bg-red text-paper font-sans text-[0.75rem] font-bold tracking-[0.14em] uppercase py-4 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {status === "sending" ? "Sending…" : "Start a conversation →"}
+                    {status === "sending"
+                      ? "Sending…"
+                      : "Start a conversation →"}
                   </button>
+
                   <p className="font-sans text-[0.75rem] text-muted text-center">
                     Prefer email?{" "}
                     <a
@@ -143,10 +334,14 @@ export default function Contact() {
                       hello@jbar.studio
                     </a>
                   </p>
+
                   {status === "error" && (
                     <p className="font-sans text-[0.78rem] text-red/80">
                       Something went wrong. Email me at{" "}
-                      <a href="mailto:hello@jbar.studio" className="underline">
+                      <a
+                        href="mailto:hello@jbar.studio"
+                        className="underline"
+                      >
                         hello@jbar.studio
                       </a>
                       .

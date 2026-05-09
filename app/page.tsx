@@ -6,19 +6,27 @@ import Process from "@/components/Process";
 import Studio from "@/components/Studio";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import SectionCounter from "@/components/SectionCounter";
+import FooterManifesto from "@/components/FooterManifesto";
 
 export default function Home() {
   return (
     <>
       <Nav />
+      <SectionCounter />
       <main>
         <Hero />
         <Work />
-        <WhatYouGet />
-        <Process />
+        <div id="what-you-get">
+          <WhatYouGet />
+        </div>
+        <div id="process">
+          <Process />
+        </div>
         <Studio />
         <Contact />
       </main>
+      <FooterManifesto />
       <Footer />
     </>
   );
