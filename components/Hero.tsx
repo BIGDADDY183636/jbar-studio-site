@@ -3,37 +3,46 @@
 import { useEffect, useRef, useState } from "react";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
-const LOCK_TIMES = [700, 950, 1200, 1450];
+const LOCK_TIMES = [700, 950, 1200, 1450] as const;
 const MORPH_TIME = 1700;
 const SUBHEAD_TIME = 2400;
 const DIGITS = "0123456789";
 
 type LetterPhase = "scrambling" | "locked" | "morphed";
 
+function randDigit() {
+  return DIGITS[Math.floor(Math.random() * 10)];
+}
+
 export default function Hero() {
-  const lockedRef = useRef([false, false, false, false]);
+  // Initialize to "JBAR" so server and client render identical HTML.
+  // useEffect immediately kicks off the scramble — no hydration mismatch.
+  const [chars, setChars] = useState<string[]>(["J", "B", "A", "R"]);
   const [phases, setPhases] = useState<LetterPhase[]>([
     "scrambling", "scrambling", "scrambling", "scrambling",
   ]);
-  const [chars, setChars] = useState(["4", "7", "2", "9"]);
   const [showSub, setShowSub] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const lockedRef = useRef([false, false, false, false]);
 
   useEffect(() => {
     setMounted(true);
 
+    // Immediately replace JBAR with random digits to start the scramble
+    setChars([randDigit(), randDigit(), randDigit(), randDigit()]);
+
     const interval = setInterval(() => {
-      setChars((prev) =>
-        prev.map((_, i) =>
-          lockedRef.current[i]
-            ? LETTERS[i]
-            : DIGITS[Math.floor(Math.random() * 10)]
+      setChars(
+        LETTERS.map((letter, i) =>
+          lockedRef.current[i] ? letter : randDigit()
         )
       );
     }, 70);
 
     const lockTimers = LOCK_TIMES.map((t, i) =>
       setTimeout(() => {
+        console.log(`[Hero] lock ${LETTERS[i]} at ${t}ms`);
         lockedRef.current[i] = true;
         setPhases((prev) =>
           prev.map((p, j) => (j === i ? "locked" : p)) as LetterPhase[]
@@ -42,11 +51,15 @@ export default function Hero() {
     );
 
     const morphTimer = setTimeout(() => {
-      setPhases(["morphed", "morphed", "morphed", "morphed"]);
+      console.log("[Hero] morph triggered at 1700ms");
+      // Clear interval BEFORE updating phases so no stray tick overwrites chars
       clearInterval(interval);
+      setPhases(["morphed", "morphed", "morphed", "morphed"]);
     }, MORPH_TIME);
 
-    const subTimer = setTimeout(() => setShowSub(true), SUBHEAD_TIME);
+    const subTimer = setTimeout(() => {
+      setShowSub(true);
+    }, SUBHEAD_TIME);
 
     return () => {
       clearInterval(interval);
@@ -116,7 +129,7 @@ export default function Hero() {
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* JBAR Wordmark — Variant O animation */}
+        {/* JBAR Wordmark — Variant O */}
         <div
           className="flex items-end justify-center select-none"
           style={{ lineHeight: 0.85 }}
@@ -137,8 +150,7 @@ export default function Hero() {
                     ? "clamp(120px, 22vw, 280px)"
                     : "clamp(88px, 16vw, 200px)",
                   letterSpacing: isMorphed ? "-0.04em" : "0.01em",
-                  color:
-                    i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
+                  color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
                   willChange: "transform",
                 }}
               >
@@ -148,7 +160,7 @@ export default function Hero() {
           })}
         </div>
 
-        {/* Subheadline, pricing, CTA — fade in after all letters morph */}
+        {/* Subheadline, pricing, CTA — fade in after morph */}
         <div
           style={{
             opacity: showSub ? 1 : 0,
