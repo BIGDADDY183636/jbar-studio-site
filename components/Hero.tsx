@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
-const DIGIT_MS = 50;   // ms between digit steps
+const DIGIT_MS = 70;   // ms between digit steps
 const MORPH_MS = 500;  // CSS morph animation duration
 const J_START  = 200;  // ms from mount before J begins counting
 // Next letter starts when the previous letter shows "7" (i.e. 6 steps in).
@@ -19,7 +19,7 @@ const STARTS: number[] = LETTERS.reduce<number[]>(
     i === 0 ? [J_START] : [...acc, acc[i - 1] + STAGGER],
   []
 );
-// @ DIGIT_MS=50: J:200  B:500  A:800  R:1100
+// @ DIGIT_MS=70: J:200  B:620  A:1040  R:1460
 
 const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
