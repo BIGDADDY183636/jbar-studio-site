@@ -18,6 +18,14 @@ const STARTS: number[] = LETTERS.reduce<number[]>(
 
 const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
+// Mobile drop-in: pure CSS, no JS state machine
+const MOBILE_WORDMARK = [
+  { letter: "J", color: "#d63031",                delay: "200ms" },
+  { letter: "B", color: "rgba(244,241,234,0.85)", delay: "350ms" },
+  { letter: "A", color: "rgba(244,241,234,0.85)", delay: "500ms" },
+  { letter: "R", color: "rgba(244,241,234,0.85)", delay: "650ms" },
+] as const;
+
 // Memoized — only re-renders when phase or char changes
 const LetterSlot = memo(
   ({
@@ -177,9 +185,32 @@ export default function Hero() {
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* JBAR Wordmark */}
+        {/* Mobile wordmark: pure CSS drop-in, no JS — hidden on desktop */}
         <div
-          className="flex items-end justify-center select-none"
+          className="flex md:hidden items-end justify-center select-none"
+          style={{ lineHeight: 0.85 }}
+        >
+          {MOBILE_WORDMARK.map(({ letter, color, delay }) => (
+            <span
+              key={letter}
+              className="mobile-letter"
+              style={{
+                fontFamily: "var(--font-inter), sans-serif",
+                fontWeight: 900,
+                fontSize: "clamp(120px, 22vw, 280px)",
+                letterSpacing: "-0.04em",
+                color,
+                animationDelay: delay,
+              }}
+            >
+              {letter}
+            </span>
+          ))}
+        </div>
+
+        {/* Desktop wordmark: count-up state machine — hidden on mobile */}
+        <div
+          className="hidden md:flex items-end justify-center select-none"
           style={{
             lineHeight: 0.85,
             minHeight: "clamp(102px, 18.7vw, 238px)",
@@ -196,8 +227,11 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Subheadline, pricing, CTA */}
+        {/* Subheadline, pricing, CTA.
+            hero-sub-mobile: on mobile, CSS animation overrides the React
+            inline opacity/transform and reveals at 1500ms instead of SUB_REVEAL. */}
         <div
+          className="hero-sub-mobile"
           style={{
             opacity: showSub ? 1 : 0,
             transform: showSub ? "translateY(0)" : "translateY(16px)",

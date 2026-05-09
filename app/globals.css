@@ -90,6 +90,23 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Mobile hero: letter drop-in ────────────────────── */
+@keyframes mobileLetterDrop {
+  0%   { transform: translateY(-150%); opacity: 0; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
+.mobile-letter {
+  display: inline-block;
+  animation: mobileLetterDrop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+/* Subheadline on mobile: CSS-driven reveal at 1500ms.
+   Overrides React inline opacity/transform while active. */
+@media (max-width: 767px) {
+  .hero-sub-mobile {
+    animation: heroFadeUp 700ms cubic-bezier(0.16, 1, 0.3, 1) 1500ms both;
+  }
+}
+
 /* ── Section counter — hidden on small screens ──────── */
 .section-counter { display: none; }
 @media (min-width: 900px) { .section-counter { display: flex; } }
