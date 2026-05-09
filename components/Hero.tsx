@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
 const DIGIT_MS = 70;   // ms between digit steps
@@ -12,8 +12,6 @@ const STAGGER  = 6 * DIGIT_MS;
 
 type Phase = "empty" | "counting" | "locked" | "morphed";
 
-// Absolute ms from mount when each letter begins its count.
-// Letters overlap: each new letter starts STAGGER ms after the previous one.
 const STARTS: number[] = LETTERS.reduce<number[]>(
   (acc, _, i) =>
     i === 0 ? [J_START] : [...acc, acc[i - 1] + STAGGER],
@@ -22,6 +20,53 @@ const STARTS: number[] = LETTERS.reduce<number[]>(
 // @ DIGIT_MS=70: J:200  B:620  A:1040  R:1460
 
 const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
+
+// ---------------------------------------------------------------------------
+// LetterSlot — memoized so digits 2–9 (ref-only textContent updates) don't
+// trigger re-renders on sibling slots or re-apply React-controlled children.
+// Only re-renders when phase or char changes (digit-1 snap, or phase transitions).
+// ---------------------------------------------------------------------------
+const LetterSlot = memo(
+  ({
+    char,
+    phase,
+    isRed,
+    slotRef,
+  }: {
+    char: string;
+    phase: Phase;
+    isRed: boolean;
+    slotRef: (el: HTMLSpanElement | null) => void;
+  }) => {
+    const isMorphed = phase === "locked" || phase === "morphed";
+    return (
+      <span
+        ref={slotRef}
+        className={phase === "locked" ? "letter-morph" : ""}
+        style={{
+          display: "inline-block",
+          fontFamily: isMorphed
+            ? "var(--font-inter), sans-serif"
+            : "var(--font-mono), monospace",
+          fontWeight: isMorphed ? 900 : 500,
+          fontSize: isMorphed
+            ? "clamp(120px, 22vw, 280px)"
+            : "clamp(88px, 16vw, 200px)",
+          letterSpacing: isMorphed ? "-0.04em" : "0.01em",
+          color: isRed ? "#d63031" : "rgba(244,241,234,0.85)",
+          opacity: phase === "empty" ? 0 : 1,
+          willChange: "transform",
+        }}
+      >
+        {char}
+      </span>
+    );
+  },
+  (prev, next) => prev.phase === next.phase && prev.char === next.char
+);
+LetterSlot.displayName = "LetterSlot";
+
+// ---------------------------------------------------------------------------
 
 export default function Hero() {
   // SSR: render "JBAR" in mono so server/client HTML matches.
@@ -32,9 +77,18 @@ export default function Hero() {
   ]);
   const [showSub, setShowSub] = useState(false);
 
+  // DOM refs for direct textContent updates on digits 2–9 (no React re-render)
+  const letterRefs = useRef<(HTMLSpanElement | null)[]>([null, null, null, null]);
+
+  // Stable ref callbacks — created once, never recreated
+  const slotRefCallbacks = useRef(
+    LETTERS.map((_, i) => (el: HTMLSpanElement | null) => {
+      letterRefs.current[i] = el;
+    })
+  );
+
   useEffect(() => {
-    // Reset to empty — count-up begins from a blank slate
-    setChars([" ", " ", " ", " "]);
+    setChars([" ", " ", " ", " "]);
     setPhases(["empty", "empty", "empty", "empty"]);
 
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -42,19 +96,31 @@ export default function Hero() {
     LETTERS.forEach((letter, li) => {
       const t0 = STARTS[li];
 
-      // Digits 1 → 9, one per DIGIT_MS
-      for (let d = 1; d <= 9; d++) {
+      // Digit 1 + phase "counting": one React re-render, establishes the char
+      // value that memoization will protect until snap.
+      timers.push(
+        setTimeout(() => {
+          setChars((p) => p.map((c, i) => (i === li ? "1" : c)));
+          setPhases((p) =>
+            p.map((ph, i) => (i === li ? "counting" : ph)) as Phase[]
+          );
+        }, t0)
+      );
+
+      // Digits 2–9: direct DOM only.
+      // LetterSlot is memoized (phase="counting", char="1" both unchanged),
+      // so React won't reconcile this slot and won't overwrite our textContent.
+      for (let d = 2; d <= 9; d++) {
         timers.push(
           setTimeout(() => {
-            setChars((p) => p.map((c, i) => (i === li ? String(d) : c)));
-            setPhases((p) =>
-              p.map((ph, i) => (i === li ? "counting" : ph)) as Phase[]
-            );
+            const el = letterRefs.current[li];
+            if (el) el.textContent = String(d);
           }, t0 + (d - 1) * DIGIT_MS)
         );
       }
 
-      // Snap to letter + trigger CSS morph animation
+      // Snap: both char and phase change → LetterSlot re-renders with the
+      // final letter and the letter-morph CSS class (starts bounce-morph).
       const snapAt = t0 + 9 * DIGIT_MS;
       timers.push(
         setTimeout(() => {
@@ -65,7 +131,7 @@ export default function Hero() {
         }, snapAt)
       );
 
-      // Morph complete — remove .letter-morph class (forwards fill keeps final state)
+      // Morph done: remove letter-morph class (CSS forwards fill keeps final state)
       timers.push(
         setTimeout(() => {
           setPhases((p) =>
@@ -134,37 +200,25 @@ export default function Hero() {
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* JBAR Wordmark — sequential count-up → snap → bounce-morph */}
+        {/* JBAR Wordmark
+            minHeight reserves the full Inter 900 height from the start so the
+            content below doesn't jump when letters snap to display size. */}
         <div
           className="flex items-end justify-center select-none"
-          style={{ lineHeight: 0.85 }}
+          style={{
+            lineHeight: 0.85,
+            minHeight: "clamp(102px, 18.7vw, 238px)",
+          }}
         >
-          {LETTERS.map((letter, i) => {
-            const phase = phases[i];
-            const isMorphed = phase === "locked" || phase === "morphed";
-            return (
-              <span
-                key={letter}
-                className={phase === "locked" ? "letter-morph" : ""}
-                style={{
-                  display: "inline-block",
-                  fontFamily: isMorphed
-                    ? "var(--font-inter), sans-serif"
-                    : "var(--font-mono), monospace",
-                  fontWeight: isMorphed ? 900 : 500,
-                  fontSize: isMorphed
-                    ? "clamp(120px, 22vw, 280px)"
-                    : "clamp(88px, 16vw, 200px)",
-                  letterSpacing: isMorphed ? "-0.04em" : "0.01em",
-                  color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
-                  opacity: phase === "empty" ? 0 : 1,
-                  willChange: "transform",
-                }}
-              >
-                {chars[i]}
-              </span>
-            );
-          })}
+          {LETTERS.map((letter, i) => (
+            <LetterSlot
+              key={letter}
+              char={chars[i]}
+              phase={phases[i]}
+              isRed={i === 0}
+              slotRef={slotRefCallbacks.current[i]}
+            />
+          ))}
         </div>
 
         {/* Subheadline, pricing, CTA — fade in after R's morph + 400ms */}
