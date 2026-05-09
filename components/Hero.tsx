@@ -6,20 +6,22 @@ const LETTERS = ["J", "B", "A", "R"] as const;
 const DIGIT_MS = 50;   // ms between digit steps
 const MORPH_MS = 500;  // CSS morph animation duration
 const J_START  = 200;  // ms from mount before J begins counting
+// Next letter starts when the previous letter shows "5" (i.e. 4 steps in).
+// Keeping this derived means it stays correct if DIGIT_MS changes.
+const STAGGER  = 4 * DIGIT_MS;
 
 type Phase = "empty" | "counting" | "locked" | "morphed";
 
 // Absolute ms from mount when each letter begins its count.
-// Each letter starts only after the previous letter's morph completes.
-// 9 digits × 80ms = 720ms counting, + 500ms morph = 1220ms per letter.
+// Letters overlap: each new letter starts STAGGER ms after the previous one.
 const STARTS: number[] = LETTERS.reduce<number[]>(
   (acc, _, i) =>
-    i === 0 ? [J_START] : [...acc, acc[i - 1] + 9 * DIGIT_MS + MORPH_MS],
+    i === 0 ? [J_START] : [...acc, acc[i - 1] + STAGGER],
   []
 );
-// J:200  B:1420  A:2640  R:3860
+// @ DIGIT_MS=50: J:200  B:400  A:600  R:800
 
-const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400; // ~5480ms
+const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
 export default function Hero() {
   // SSR: render "JBAR" in mono so server/client HTML matches.
