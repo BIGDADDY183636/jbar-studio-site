@@ -6,8 +6,6 @@ const LETTERS = ["J", "B", "A", "R"] as const;
 const DIGIT_MS = 70;   // ms between digit steps
 const MORPH_MS = 500;  // CSS morph animation duration
 const J_START  = 200;  // ms from mount before J begins counting
-// Next letter starts when the previous letter shows "7" (i.e. 6 steps in).
-// Keeping this derived means it stays correct if DIGIT_MS changes.
 const STAGGER  = 6 * DIGIT_MS;
 
 type Phase = "empty" | "counting" | "locked" | "morphed";
@@ -21,11 +19,7 @@ const STARTS: number[] = LETTERS.reduce<number[]>(
 
 const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
-// ---------------------------------------------------------------------------
-// LetterSlot — memoized so digits 2–9 (ref-only textContent updates) don't
-// trigger re-renders on sibling slots or re-apply React-controlled children.
-// Only re-renders when phase or char changes (digit-1 snap, or phase transitions).
-// ---------------------------------------------------------------------------
+// Memoized — only re-renders when phase or char changes
 const LetterSlot = memo(
   ({
     char,
@@ -66,21 +60,14 @@ const LetterSlot = memo(
 );
 LetterSlot.displayName = "LetterSlot";
 
-// ---------------------------------------------------------------------------
-
 export default function Hero() {
-  // SSR: render "JBAR" in mono so server/client HTML matches.
-  // useEffect resets to empty immediately on mount before the count begins.
   const [chars, setChars] = useState<string[]>(["J", "B", "A", "R"]);
   const [phases, setPhases] = useState<Phase[]>([
     "counting", "counting", "counting", "counting",
   ]);
   const [showSub, setShowSub] = useState(false);
 
-  // DOM refs for direct textContent updates on digits 2–9 (no React re-render)
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([null, null, null, null]);
-
-  // Stable ref callbacks — created once, never recreated
   const slotRefCallbacks = useRef(
     LETTERS.map((_, i) => (el: HTMLSpanElement | null) => {
       letterRefs.current[i] = el;
@@ -88,62 +75,71 @@ export default function Hero() {
   );
 
   useEffect(() => {
-    setChars([" ", " ", " ", " "]);
-    setPhases(["empty", "empty", "empty", "empty"]);
+    console.log("[Hero] mount fired");
 
+    let rafId: number;
     const timers: ReturnType<typeof setTimeout>[] = [];
 
-    LETTERS.forEach((letter, li) => {
-      const t0 = STARTS[li];
+    // Wrap in RAF — Safari is more reliable starting timers after a paint
+    rafId = requestAnimationFrame(() => {
+      console.log("[Hero] RAF fired — starting animation");
 
-      // Digit 1 + phase "counting": one React re-render, establishes the char
-      // value that memoization will protect until snap.
-      timers.push(
-        setTimeout(() => {
-          setChars((p) => p.map((c, i) => (i === li ? "1" : c)));
-          setPhases((p) =>
-            p.map((ph, i) => (i === li ? "counting" : ph)) as Phase[]
-          );
-        }, t0)
-      );
+      setChars([" ", " ", " ", " "]);
+      setPhases(["empty", "empty", "empty", "empty"]);
 
-      // Digits 2–9: direct DOM only.
-      // LetterSlot is memoized (phase="counting", char="1" both unchanged),
-      // so React won't reconcile this slot and won't overwrite our textContent.
-      for (let d = 2; d <= 9; d++) {
+      LETTERS.forEach((letter, li) => {
+        const t0 = STARTS[li];
+
+        // Digit 1 + phase start: one React re-render
         timers.push(
           setTimeout(() => {
-            const el = letterRefs.current[li];
-            if (el) el.textContent = String(d);
-          }, t0 + (d - 1) * DIGIT_MS)
+            console.log(`[Hero] ${letter} counting start`);
+            setChars((p) => p.map((c, i) => (i === li ? "1" : c)));
+            setPhases((p) =>
+              p.map((ph, i) => (i === li ? "counting" : ph)) as Phase[]
+            );
+          }, t0)
         );
-      }
 
-      // Snap: both char and phase change → LetterSlot re-renders with the
-      // final letter and the letter-morph CSS class (starts bounce-morph).
-      const snapAt = t0 + 9 * DIGIT_MS;
-      timers.push(
-        setTimeout(() => {
-          setChars((p) => p.map((c, i) => (i === li ? letter : c)));
-          setPhases((p) =>
-            p.map((ph, i) => (i === li ? "locked" : ph)) as Phase[]
+        // Digits 2–9: direct DOM, no re-render (LetterSlot memoized)
+        for (let d = 2; d <= 9; d++) {
+          timers.push(
+            setTimeout(() => {
+              const el = letterRefs.current[li];
+              if (el) el.textContent = String(d);
+            }, t0 + (d - 1) * DIGIT_MS)
           );
-        }, snapAt)
-      );
+        }
 
-      // Morph done: remove letter-morph class (CSS forwards fill keeps final state)
-      timers.push(
-        setTimeout(() => {
-          setPhases((p) =>
-            p.map((ph, i) => (i === li ? "morphed" : ph)) as Phase[]
-          );
-        }, snapAt + MORPH_MS)
-      );
+        // Snap → letter + morph
+        const snapAt = t0 + 9 * DIGIT_MS;
+        timers.push(
+          setTimeout(() => {
+            console.log(`[Hero] ${letter} snap`);
+            setChars((p) => p.map((c, i) => (i === li ? letter : c)));
+            setPhases((p) =>
+              p.map((ph, i) => (i === li ? "locked" : ph)) as Phase[]
+            );
+          }, snapAt)
+        );
+
+        // Morph done
+        timers.push(
+          setTimeout(() => {
+            setPhases((p) =>
+              p.map((ph, i) => (i === li ? "morphed" : ph)) as Phase[]
+            );
+          }, snapAt + MORPH_MS)
+        );
+      });
+
+      timers.push(setTimeout(() => setShowSub(true), SUB_REVEAL));
     });
 
-    timers.push(setTimeout(() => setShowSub(true), SUB_REVEAL));
-
-    return () => timers.forEach(clearTimeout);
+    return () => {
+      cancelAnimationFrame(rafId);
+      timers.forEach(clearTimeout);
+    };
   }, []);
 
   return (
@@ -200,9 +196,7 @@ export default function Hero() {
           JBAR Design Studio&ensp;—&ensp;Chicago, IL
         </p>
 
-        {/* JBAR Wordmark
-            minHeight reserves the full Inter 900 height from the start so the
-            content below doesn't jump when letters snap to display size. */}
+        {/* JBAR Wordmark */}
         <div
           className="flex items-end justify-center select-none"
           style={{
@@ -221,7 +215,7 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Subheadline, pricing, CTA — fade in after R's morph + 400ms */}
+        {/* Subheadline, pricing, CTA */}
         <div
           style={{
             opacity: showSub ? 1 : 0,
@@ -265,6 +259,39 @@ export default function Hero() {
             transition: "opacity 600ms ease 400ms",
           }}
         />
+      </div>
+
+      {/* ── iOS DEBUG OVERLAY — remove after testing ────────────────────────
+          Shows live animation state on-screen so you can read it on iPhone.
+          Phase codes: E=empty C=counting L=locked M=morphed                */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "12px",
+          left: "12px",
+          zIndex: 9999,
+          background: "rgba(0,0,0,0.88)",
+          color: "#00ff88",
+          fontFamily: "monospace",
+          fontSize: "12px",
+          lineHeight: 1.7,
+          padding: "8px 12px",
+          borderRadius: "6px",
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      >
+        <div style={{ color: "#ff6b6b", marginBottom: "2px" }}>
+          ▶ HERO DEBUG
+        </div>
+        <div>
+          phases:{" "}
+          {phases
+            .map((p, i) => `${LETTERS[i]}:${p[0].toUpperCase()}`)
+            .join("  ")}
+        </div>
+        <div>chars: [{chars.join("")}]</div>
+        <div>sub: {showSub ? "✓" : "—"}</div>
       </div>
     </section>
   );
