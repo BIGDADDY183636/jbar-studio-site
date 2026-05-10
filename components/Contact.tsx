@@ -183,7 +183,7 @@ export default function Contact() {
                         <option
                           key={t}
                           value={t}
-                          style={{ background: "#0a0908", color: "#f4f1ea" }}
+                          style={{ background: "#1a1714", color: "#ede8de" }}
                         >
                           {t}
                         </option>
@@ -210,13 +210,13 @@ export default function Contact() {
                             className="font-mono text-[0.55rem] tracking-[0.14em] uppercase px-3 py-1.5 rounded-full border transition-all duration-150"
                             style={{
                               borderColor: selected
-                                ? "#d63031"
-                                : "rgba(244,241,234,0.15)",
+                                ? "#b04545"
+                                : "rgba(237,232,222,0.15)",
                               color: selected
-                                ? "#d63031"
-                                : "rgba(244,241,234,0.45)",
+                                ? "#b04545"
+                                : "rgba(237,232,222,0.45)",
                               background: selected
-                                ? "rgba(214,48,49,0.08)"
+                                ? "rgba(176,69,69,0.08)"
                                 : "transparent",
                             }}
                           >
@@ -251,7 +251,7 @@ export default function Contact() {
                         <option
                           key={b}
                           value={b}
-                          style={{ background: "#0a0908", color: "#f4f1ea" }}
+                          style={{ background: "#1a1714", color: "#ede8de" }}
                         >
                           {b}
                         </option>
@@ -275,7 +275,7 @@ export default function Contact() {
                         <option
                           key={t}
                           value={t}
-                          style={{ background: "#0a0908", color: "#f4f1ea" }}
+                          style={{ background: "#1a1714", color: "#ede8de" }}
                         >
                           {t}
                         </option>

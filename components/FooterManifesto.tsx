@@ -18,7 +18,7 @@ export default function FooterManifesto() {
         style={{
           fontSize: "clamp(3.5rem, 9vw, 9rem)",
           letterSpacing: "-0.04em",
-          color: "rgba(244,241,234,0.72)",
+          color: "rgba(237,232,222,0.72)",
         }}
       >
         For Chicago.

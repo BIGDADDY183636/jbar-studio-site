@@ -8,13 +8,13 @@
   }
 
   body {
-    background-color: #0a0908;
-    color: #f4f1ea;
+    background-color: #1a1714;
+    color: #ede8de;
   }
 
   ::selection {
-    background-color: #d63031;
-    color: #f4f1ea;
+    background-color: #b04545;
+    color: #ede8de;
   }
 }
 
@@ -43,7 +43,7 @@
   left: 0;
   width: 0;
   height: 1px;
-  background-color: #d63031;
+  background-color: #b04545;
   transition: width 220ms ease;
 }
 .nav-underline:hover::after {
@@ -57,7 +57,7 @@
 }
 .btn-glow:hover {
   transform: scale(1.025);
-  box-shadow: 0 0 20px rgba(214, 48, 49, 0.22);
+  box-shadow: 0 0 20px rgba(176, 69, 69, 0.22);
 }
 
 /* ── Footer pulse line ──────────────────────────────── */

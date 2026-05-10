@@ -1,14 +1,14 @@
 import Reveal from "@/components/Reveal";
 
 const included = [
-  "Custom design — not a template",
+  "Custom design (not a template)",
   "Mobile-first, fully responsive build",
   "Up to 5 pages",
   "Contact form",
   "Setup on your custom domain",
-  "Hosted free on Vercel",
+  "Free hosting on Vercel",
   "Two rounds of revisions",
-  "Live in 7 days",
+  "Live launch in 7 days",
 ];
 
 const excluded = [

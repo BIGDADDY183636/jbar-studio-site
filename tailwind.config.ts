@@ -9,15 +9,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        canvas: "#0a0908",
-        "canvas-alt": "#14100f",
-        "canvas-raised": "#1e1916",
-        paper: "#f4f1ea",
+        canvas: "#1a1714",
+        "canvas-alt": "#241e1b",
+        "canvas-raised": "#2e2722",
+        paper: "#ede8de",
         "paper-dim": "#b8b4ac",
         muted: "#8a8680",
-        red: "#d63031",
-        "red-dark": "#b82828",
-        "red-dim": "#3d1010",
+        red: "#b04545",
+        "red-dark": "#973b3b",
+        "red-dim": "#2d1c1c",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],

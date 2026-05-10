@@ -20,10 +20,10 @@ const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
 // Mobile drop-in: pure CSS, no JS state machine
 const MOBILE_WORDMARK = [
-  { letter: "J", color: "#d63031",                delay: "200ms" },
-  { letter: "B", color: "rgba(244,241,234,0.85)", delay: "350ms" },
-  { letter: "A", color: "rgba(244,241,234,0.85)", delay: "500ms" },
-  { letter: "R", color: "rgba(244,241,234,0.85)", delay: "650ms" },
+  { letter: "J", color: "#b04545",                delay: "200ms" },
+  { letter: "B", color: "rgba(237,232,222,0.85)", delay: "350ms" },
+  { letter: "A", color: "rgba(237,232,222,0.85)", delay: "500ms" },
+  { letter: "R", color: "rgba(237,232,222,0.85)", delay: "650ms" },
 ] as const;
 
 // Memoized — only re-renders when phase or char changes
@@ -48,7 +48,7 @@ const LetterSlot = memo(
         fontWeight: 900,
         fontSize: "clamp(120px, 22vw, 280px)",
         letterSpacing: "-0.04em",
-        color: isRed ? "#d63031" : "rgba(244,241,234,0.85)",
+        color: isRed ? "#b04545" : "rgba(237,232,222,0.85)",
         opacity: phase === "empty" ? 0 : 1,
         willChange: "transform",
       }}
@@ -149,7 +149,7 @@ export default function Hero() {
             top: "-200px",
             right: "-80px",
             background:
-              "radial-gradient(circle, rgba(214,48,49,0.07) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(176,69,69,0.07) 0%, transparent 70%)",
           }}
         />
         <div
@@ -160,7 +160,7 @@ export default function Hero() {
             bottom: "-160px",
             left: "-60px",
             background:
-              "radial-gradient(circle, rgba(180,28,28,0.05) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(140,56,56,0.05) 0%, transparent 70%)",
           }}
         />
       </div>
