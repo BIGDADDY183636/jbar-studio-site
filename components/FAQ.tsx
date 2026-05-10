@@ -46,10 +46,9 @@ export default function FAQ() {
 
         <Reveal delay={0.1} duration={900}>
           <h2
-            className="font-sans font-black text-paper text-center mx-auto mb-14"
+            className="font-display font-semibold text-paper text-center mx-auto mb-14"
             style={{
               fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
-              letterSpacing: "-0.025em",
               maxWidth: "16ch",
             }}
           >
@@ -68,7 +67,7 @@ export default function FAQ() {
                     className="w-full flex items-center justify-between gap-6 py-5 text-left group"
                   >
                     <span
-                      className="font-sans font-bold text-paper/80 leading-snug group-hover:text-paper transition-colors duration-150"
+                      className="font-display font-semibold text-paper/80 leading-snug group-hover:text-paper transition-colors duration-150"
                       style={{ fontSize: "clamp(0.88rem, 1.4vw, 1rem)" }}
                     >
                       {faq.q}

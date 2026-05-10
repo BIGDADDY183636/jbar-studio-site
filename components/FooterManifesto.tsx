@@ -5,19 +5,17 @@ export default function FooterManifesto() {
       style={{ minHeight: "100vh" }}
     >
       <p
-        className="font-sans font-black text-paper leading-none"
+        className="font-display font-bold text-paper leading-none"
         style={{
           fontSize: "clamp(3.5rem, 9vw, 9rem)",
-          letterSpacing: "-0.04em",
         }}
       >
         Built in Chicago.
       </p>
       <p
-        className="font-sans font-black leading-none mt-3"
+        className="font-display font-bold leading-none mt-3"
         style={{
           fontSize: "clamp(3.5rem, 9vw, 9rem)",
-          letterSpacing: "-0.04em",
           color: "rgba(244,241,234,0.72)",
         }}
       >

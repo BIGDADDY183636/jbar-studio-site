@@ -107,10 +107,9 @@ export default function Work() {
 
                 {/* Project name */}
                 <h2
-                  className="font-sans font-black text-paper leading-none mb-3"
+                  className="font-display font-semibold text-paper leading-none mb-3"
                   style={{
                     fontSize: "clamp(1.8rem, 2.8vw, 2.4rem)",
-                    letterSpacing: "-0.03em",
                   }}
                 >
                   {p.name}
