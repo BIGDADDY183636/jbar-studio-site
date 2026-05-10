@@ -8,7 +8,7 @@ export default function Studio() {
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-10">
             <span className="text-paper/30">[ </span>
-            <span className="text-muted">04 / STUDIO</span>
+            <span className="text-muted">04 / ABOUT</span>
             <span className="text-paper/30"> ]</span>
           </p>
         </Reveal>
@@ -23,7 +23,7 @@ export default function Studio() {
               maxWidth: "14ch",
             }}
           >
-            About the studio.
+            About JBAR.
           </h2>
         </Reveal>
 
@@ -31,25 +31,32 @@ export default function Studio() {
         <div className="max-w-2xl mx-auto space-y-5">
           <Reveal delay={0.14}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
-              JBAR Design Studio is an independent web practice based on
-              Chicago&apos;s North Side. I build websites for independent
-              businesses who&apos;d rather run their business than wrestle with
-              Wix.
+              I&apos;m Jake. I&apos;m 13, and I build the websites at JBAR.
             </p>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
-              I work with one client at a time. Every site is built from
-              scratch — no templates, no themes, no page builders. The result is
-              a site that looks like your business, not like everyone
-              else&apos;s. I keep the price flat and the timeline short because
-              that&apos;s what independent business owners actually need.
+              I know hiring a 13-year-old to build your business&apos;s website
+              sounds like a risk. I take that seriously. Every site I build is
+              custom-coded, mobile-responsive, fast-loading, and designed around
+              your business — not dropped into a template. You can see exactly
+              what I build at the demos on this site. That&apos;s the standard.
+              If I can&apos;t deliver it, you don&apos;t pay.
             </p>
           </Reveal>
           <Reveal delay={0.26}>
             <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
-              If you run an independent business in Chicago and you&apos;ve been
-              meaning to get a real website, that&apos;s what JBAR is for.
+              My dad partners with me on the business side — contracts, invoices,
+              accountability. I do the design, code, and client calls. We work as
+              a team, which is why we can keep the price at $400 instead of
+              charging what an agency would.
+            </p>
+          </Reveal>
+          <Reveal delay={0.32}>
+            <p className="font-sans text-[0.92rem] text-paper/65 leading-[1.85]">
+              I&apos;m doing this because I want to build things, and I want to
+              be good at it. Your business getting a great website is how I get
+              there. I take the work as seriously as you take yours.
             </p>
           </Reveal>
         </div>
