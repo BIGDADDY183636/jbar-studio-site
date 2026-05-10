@@ -4,6 +4,22 @@ import Reveal from "@/components/Reveal";
 const projects = [
   {
     number: "01",
+    category: "Florist",
+    name: "Ash & Birch",
+    description:
+      "Independent Chicago florist. Hand-tied stems, weekly subscriptions, custom event florals. Logan Square.",
+    url: "https://florist.jbar.studio",
+  },
+  {
+    number: "02",
+    category: "Accounting",
+    name: "Halsted Ledger",
+    description:
+      "Independent tax and accounting firm for Chicago's small businesses. Advisory, bookkeeping, year-round support.",
+    url: "https://tax.jbar.studio",
+  },
+  {
+    number: "03",
     category: "Café",
     name: "Linden & Oak",
     description:
@@ -11,7 +27,7 @@ const projects = [
     url: "https://cafe.jbar.studio",
   },
   {
-    number: "02",
+    number: "04",
     category: "Auto",
     name: "Belmont Auto Works",
     description:
@@ -19,7 +35,7 @@ const projects = [
     url: "https://auto.jbar.studio",
   },
   {
-    number: "03",
+    number: "05",
     category: "Salon",
     name: "Maren Studio",
     description:
@@ -27,7 +43,7 @@ const projects = [
     url: "https://salon.jbar.studio",
   },
   {
-    number: "04",
+    number: "06",
     category: "Fitness",
     name: "Northbridge Athletic",
     description:
@@ -35,7 +51,7 @@ const projects = [
     url: "https://gym.jbar.studio",
   },
   {
-    number: "05",
+    number: "07",
     category: "Bookstore",
     name: "Page & Spine",
     description:
