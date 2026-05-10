@@ -20,22 +20,6 @@ const projects = [
   },
   {
     number: "03",
-    category: "Café",
-    name: "Linden & Oak",
-    description:
-      "Independent neighborhood café in Lincoln Square, Chicago. Full menu, hours, and story.",
-    url: "https://cafe.jbar.studio",
-  },
-  {
-    number: "04",
-    category: "Auto",
-    name: "Belmont Auto Works",
-    description:
-      "Family-run auto repair shop on Chicago's North Side. Three generations, one address.",
-    url: "https://auto.jbar.studio",
-  },
-  {
-    number: "05",
     category: "Salon",
     name: "Maren Studio",
     description:
@@ -43,20 +27,36 @@ const projects = [
     url: "https://salon.jbar.studio",
   },
   {
-    number: "06",
-    category: "Fitness",
-    name: "Northbridge Athletic",
-    description:
-      "Independent strength gym on Chicago's North Side. Coach-led, no-mirror.",
-    url: "https://gym.jbar.studio",
-  },
-  {
-    number: "07",
+    number: "04",
     category: "Bookstore",
     name: "Page & Spine",
     description:
       "Independent neighborhood bookstore. Carefully chosen books, Western Avenue.",
     url: "https://books.jbar.studio",
+  },
+  {
+    number: "05",
+    category: "Café",
+    name: "Linden & Oak",
+    description:
+      "Independent neighborhood café in Lincoln Square, Chicago. Full menu, hours, and story.",
+    url: "https://cafe.jbar.studio",
+  },
+  {
+    number: "06",
+    category: "Auto",
+    name: "Belmont Auto Works",
+    description:
+      "Family-run auto repair shop on Chicago's North Side. Three generations, one address.",
+    url: "https://auto.jbar.studio",
+  },
+  {
+    number: "07",
+    category: "Fitness",
+    name: "Northbridge Athletic",
+    description:
+      "Independent strength gym on Chicago's North Side. Coach-led, no-mirror.",
+    url: "https://gym.jbar.studio",
   },
 ];
 
