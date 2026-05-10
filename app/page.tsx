@@ -7,12 +7,14 @@ import Studio from "@/components/Studio";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SectionCounter from "@/components/SectionCounter";
+import StickyNav from "@/components/StickyNav";
 import FooterManifesto from "@/components/FooterManifesto";
 
 export default function Home() {
   return (
     <>
       <Nav />
+      <StickyNav />
       <SectionCounter />
       <main>
         <Hero />
