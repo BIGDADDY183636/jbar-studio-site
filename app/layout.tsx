@@ -20,7 +20,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://jbar.studio"),
   title: "JBAR Design Studio — Custom Websites for Independent Businesses",
   description:
-    "Custom websites for Chicago's independent businesses. $400 flat. Built in a week. No templates.",
+    "Custom websites for Chicago's independent businesses. $400 flat, built in a week, live forever. Independent web studio on the North Side.",
+  openGraph: {
+    description:
+      "Custom websites for Chicago's independent businesses. $400 flat, built in a week, live forever. Independent web studio on the North Side.",
+  },
 };
 
 export default function RootLayout({

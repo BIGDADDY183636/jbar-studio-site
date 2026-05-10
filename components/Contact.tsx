@@ -6,8 +6,15 @@ import Reveal from "@/components/Reveal";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwvyollb";
 
 const STYLE_PILLS = [
-  "Modern", "Classic", "Bold", "Minimal", "Editorial",
-  "Playful", "Industrial", "Warm", "Not Sure",
+  "Clean & modern",
+  "Classic & timeless",
+  "Bold & loud",
+  "Minimal & quiet",
+  "Magazine-style",
+  "Playful & friendly",
+  "Industrial & raw",
+  "Warm & inviting",
+  "Not sure yet",
 ];
 const BUSINESS_TYPES = [
   "Café / Restaurant",
@@ -21,7 +28,6 @@ const BUSINESS_TYPES = [
 ];
 const BUDGETS = [
   "$400 — Standard package",
-  "~$600 — With add-ons",
   "Let's discuss",
 ];
 const TIMELINES = ["ASAP", "2–4 weeks", "1–2 months", "No rush / flexible"];
