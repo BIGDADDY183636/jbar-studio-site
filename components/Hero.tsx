@@ -252,7 +252,7 @@ export default function Hero() {
           </h1>
 
           <p className="font-mono text-[0.78rem] text-paper/50 mt-6 tracking-[0.18em] uppercase">
-            $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Live forever
+            $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Yours to keep
           </p>
 
           <div className="flex justify-center mt-8">
