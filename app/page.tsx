@@ -4,6 +4,7 @@ import Work from "@/components/Work";
 import WhatYouGet from "@/components/WhatYouGet";
 import Process from "@/components/Process";
 import Studio from "@/components/Studio";
+import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SectionCounter from "@/components/SectionCounter";
@@ -26,6 +27,7 @@ export default function Home() {
           <Process />
         </div>
         <Studio />
+        <FAQ />
         <Contact />
       </main>
       <FooterManifesto />

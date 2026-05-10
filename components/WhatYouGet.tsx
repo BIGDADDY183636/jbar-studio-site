@@ -7,7 +7,7 @@ const included = [
   "Contact form",
   "Setup on your custom domain",
   "Hosted free on Vercel",
-  "One round of revisions",
+  "Two rounds of revisions",
   "Live in 7 days",
 ];
 

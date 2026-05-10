@@ -78,7 +78,7 @@ export default function Contact() {
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-12">
             <span className="text-red">[ </span>
-            <span className="text-muted">05 / CONTACT</span>
+            <span className="text-muted">06 / CONTACT</span>
             <span className="text-red"> ]</span>
           </p>
         </Reveal>

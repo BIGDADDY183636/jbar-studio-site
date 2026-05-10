@@ -8,10 +8,11 @@ const SECTIONS = [
   { id: "what-you-get", number: "03", label: "What You Get" },
   { id: "process",      number: "04", label: "Process" },
   { id: "studio",       number: "05", label: "Studio" },
-  { id: "contact",      number: "06", label: "Contact" },
+  { id: "faq",          number: "06", label: "FAQ" },
+  { id: "contact",      number: "07", label: "Contact" },
 ];
 
-const TOTAL = "06";
+const TOTAL = "07";
 
 export default function SectionCounter() {
   const [current, setCurrent] = useState(0);
