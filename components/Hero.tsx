@@ -44,10 +44,10 @@ const LetterSlot = memo(
       className={phase === "locked" ? "letter-morph" : ""}
       style={{
         display: "inline-block",
-        fontFamily: "var(--font-display), serif",
-        fontWeight: 700,
+        fontFamily: "var(--font-inter), sans-serif",
+        fontWeight: 900,
         fontSize: "clamp(120px, 22vw, 280px)",
-        letterSpacing: "-0.02em",
+        letterSpacing: "-0.04em",
         color: isRed ? "#d63031" : "rgba(244,241,234,0.85)",
         opacity: phase === "empty" ? 0 : 1,
         willChange: "transform",
@@ -195,10 +195,10 @@ export default function Hero() {
               key={letter}
               className="mobile-letter"
               style={{
-                fontFamily: "var(--font-display), serif",
-                fontWeight: 700,
+                fontFamily: "var(--font-inter), sans-serif",
+                fontWeight: 900,
                 fontSize: "clamp(120px, 22vw, 280px)",
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.04em",
                 color,
                 animationDelay: delay,
               }}
@@ -240,9 +240,10 @@ export default function Hero() {
           }}
         >
           <h1
-            className="font-display font-semibold text-paper mx-auto mt-8"
+            className="font-sans font-black text-paper mx-auto mt-8"
             style={{
               fontSize: "clamp(1.4rem, 3vw, 2.4rem)",
+              letterSpacing: "-0.025em",
               maxWidth: "22ch",
               lineHeight: 1.15,
             }}

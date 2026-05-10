@@ -39,9 +39,10 @@ export default function Process() {
         {/* Centered headline */}
         <Reveal delay={0.1} duration={900}>
           <h2
-            className="font-display font-semibold text-paper text-center mx-auto mb-16"
+            className="font-sans font-black text-paper text-center mx-auto mb-16"
             style={{
               fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
+              letterSpacing: "-0.025em",
               maxWidth: "12ch",
             }}
           >
@@ -58,7 +59,8 @@ export default function Process() {
                   {step.number}
                 </p>
                 <h3
-                  className="font-display font-semibold text-paper text-[1.5rem] leading-tight mb-3"
+                  className="font-sans font-bold text-paper text-[1.5rem] leading-tight mb-3"
+                  style={{ letterSpacing: "-0.02em" }}
                 >
                   {step.title}
                 </h3>

@@ -88,9 +88,10 @@ export default function Contact() {
           <div>
             <Reveal delay={0.1} duration={900}>
               <h2
-                className="font-display font-semibold text-paper leading-tight mb-6"
+                className="font-sans font-black text-paper leading-tight mb-6"
                 style={{
                   fontSize: "clamp(2.8rem, 5.5vw, 5rem)",
+                  letterSpacing: "-0.03em",
                 }}
               >
                 Let&apos;s start{" "}
@@ -119,7 +120,8 @@ export default function Contact() {
               {status === "sent" ? (
                 <div className="py-10">
                   <h3
-                    className="font-display font-semibold text-paper text-[1.8rem] leading-tight mb-3"
+                    className="font-sans font-black text-paper text-[1.8rem] leading-tight mb-3"
+                    style={{ letterSpacing: "-0.025em" }}
                   >
                     Got it.
                   </h3>

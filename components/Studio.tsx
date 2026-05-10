@@ -16,9 +16,10 @@ export default function Studio() {
         {/* Centered heading */}
         <Reveal delay={0.1} duration={900}>
           <h2
-            className="font-display font-semibold text-paper text-center mx-auto mb-14"
+            className="font-sans font-black text-paper text-center mx-auto mb-14"
             style={{
               fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
+              letterSpacing: "-0.025em",
               maxWidth: "14ch",
             }}
           >
