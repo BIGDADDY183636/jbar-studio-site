@@ -35,7 +35,7 @@ const TIMELINES = ["ASAP", "2–4 weeks", "1–2 months", "No rush / flexible"];
 type Status = "idle" | "sending" | "sent" | "error";
 
 const inputCls =
-  "w-full bg-canvas border border-paper/[0.1] rounded-sm px-4 py-3 font-sans text-[0.88rem] text-paper placeholder-paper/20 focus:outline-none focus:border-red transition-colors duration-200";
+  "w-full bg-canvas border border-paper/[0.1] rounded-sm px-4 py-3 font-sans text-[0.88rem] text-paper placeholder-paper/20 focus:outline-none focus:border-paper/50 transition-colors duration-200";
 const labelCls =
   "block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-2";
 
@@ -73,13 +73,13 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-canvas border-t border-red/20 py-28">
+    <section id="contact" className="bg-canvas border-t border-paper/[0.1] py-28">
       <div className="max-w-6xl mx-auto px-6">
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-12">
-            <span className="text-red">[ </span>
+            <span className="text-paper/30">[ </span>
             <span className="text-muted">06 / CONTACT</span>
-            <span className="text-red"> ]</span>
+            <span className="text-paper/30"> ]</span>
           </p>
         </Reveal>
 
@@ -95,7 +95,7 @@ export default function Contact() {
                 }}
               >
                 Let&apos;s start{" "}
-                <span className="text-red">something.</span>
+                <span className="text-paper">something.</span>
               </h2>
             </Reveal>
             <Reveal delay={0.18}>
@@ -107,7 +107,7 @@ export default function Contact() {
             <Reveal delay={0.24}>
               <a
                 href="mailto:hello@jbar.studio"
-                className="font-sans text-[0.85rem] font-medium text-red hover:text-red-dark transition-colors tracking-wide"
+                className="font-sans text-[0.85rem] font-medium text-paper/60 hover:text-paper transition-colors tracking-wide"
               >
                 hello@jbar.studio
               </a>
@@ -210,13 +210,13 @@ export default function Contact() {
                             className="font-mono text-[0.55rem] tracking-[0.14em] uppercase px-3 py-1.5 rounded-full border transition-all duration-150"
                             style={{
                               borderColor: selected
-                                ? "#d63031"
+                                ? "rgba(244,241,234,0.7)"
                                 : "rgba(244,241,234,0.15)",
                               color: selected
-                                ? "#d63031"
+                                ? "rgba(244,241,234,0.95)"
                                 : "rgba(244,241,234,0.45)",
                               background: selected
-                                ? "rgba(214,48,49,0.08)"
+                                ? "rgba(244,241,234,0.08)"
                                 : "transparent",
                             }}
                           >
@@ -291,7 +291,7 @@ export default function Contact() {
                         name="has_brand_assets"
                         checked={hasAssets}
                         onChange={(e) => setHasAssets(e.target.checked)}
-                        className="mt-0.5 flex-shrink-0 accent-red"
+                        className="mt-0.5 flex-shrink-0 accent-paper"
                         value="yes"
                       />
                       <span className="font-mono text-[0.58rem] tracking-[0.14em] uppercase text-paper/40 leading-relaxed group-hover:text-paper/60 transition-colors">
@@ -324,7 +324,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={status === "sending"}
-                    className="btn-glow w-full bg-red text-paper font-sans text-[0.75rem] font-bold tracking-[0.14em] uppercase py-4 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-glow w-full bg-paper text-canvas font-sans text-[0.75rem] font-bold tracking-[0.14em] uppercase py-4 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {status === "sending"
                       ? "Sending…"
@@ -335,14 +335,14 @@ export default function Contact() {
                     Prefer email?{" "}
                     <a
                       href="mailto:hello@jbar.studio"
-                      className="text-red hover:text-red-dark transition-colors"
+                      className="text-paper/60 hover:text-paper transition-colors"
                     >
                       hello@jbar.studio
                     </a>
                   </p>
 
                   {status === "error" && (
-                    <p className="font-sans text-[0.78rem] text-red/80">
+                    <p className="font-sans text-[0.78rem] text-muted">
                       Something went wrong. Email me at{" "}
                       <a
                         href="mailto:hello@jbar.studio"

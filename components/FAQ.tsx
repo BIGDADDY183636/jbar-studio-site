@@ -38,9 +38,9 @@ export default function FAQ() {
       <div className="max-w-3xl mx-auto px-6">
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-10">
-            <span className="text-red">[ </span>
+            <span className="text-paper/30">[ </span>
             <span className="text-muted">05 / FAQ</span>
-            <span className="text-red"> ]</span>
+            <span className="text-paper/30"> ]</span>
           </p>
         </Reveal>
 
@@ -74,7 +74,7 @@ export default function FAQ() {
                       {faq.q}
                     </span>
                     <span
-                      className="flex-shrink-0 font-mono text-[0.85rem] text-red transition-transform duration-300"
+                      className="flex-shrink-0 font-mono text-[0.85rem] text-paper/60 transition-transform duration-300"
                       style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0deg)" }}
                     >
                       +

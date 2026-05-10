@@ -129,7 +129,7 @@ export default function StickyNav() {
                         left: 0,
                         width: "100%",
                         height: "1px",
-                        background: "#d63031",
+                        background: "rgba(244,241,234,0.7)",
                       }}
                     />
                   )}
@@ -147,8 +147,8 @@ export default function StickyNav() {
               fontWeight: 600,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              background: "#d63031",
-              color: "#f4f1ea",
+              background: "#f4f1ea",
+              color: "#0a0908",
               padding: "0.45rem 1rem",
               borderRadius: "9999px",
               textDecoration: "none",
@@ -156,10 +156,10 @@ export default function StickyNav() {
               whiteSpace: "nowrap",
             }}
             onMouseEnter={(e) =>
-              ((e.target as HTMLElement).style.background = "#b82828")
+              ((e.target as HTMLElement).style.background = "#ddd9d0")
             }
             onMouseLeave={(e) =>
-              ((e.target as HTMLElement).style.background = "#d63031")
+              ((e.target as HTMLElement).style.background = "#f4f1ea")
             }
           >
             Start a project

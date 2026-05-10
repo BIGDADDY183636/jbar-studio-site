@@ -25,9 +25,9 @@ export default function WhatYouGet() {
         {/* Centered label */}
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-10">
-            <span className="text-red">[ </span>
+            <span className="text-paper/30">[ </span>
             <span className="text-muted">02 / WHAT YOU GET</span>
-            <span className="text-red"> ]</span>
+            <span className="text-paper/30"> ]</span>
           </p>
         </Reveal>
 
@@ -49,7 +49,7 @@ export default function WhatYouGet() {
           {/* Included */}
           <div>
             <Reveal delay={0.14}>
-              <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-red mb-6">
+              <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-paper/50 mb-6">
                 Included
               </p>
             </Reveal>
@@ -57,7 +57,7 @@ export default function WhatYouGet() {
               {included.map((item, i) => (
                 <Reveal key={item} delay={0.16 + i * 0.04}>
                   <li className="flex items-baseline gap-4 py-3.5 border-b border-paper/[0.07]">
-                    <span className="text-red text-[0.75rem] flex-shrink-0 select-none">
+                    <span className="text-paper/50 text-[0.75rem] flex-shrink-0 select-none">
                       →
                     </span>
                     <span className="font-sans text-[0.88rem] text-paper/80 leading-snug">

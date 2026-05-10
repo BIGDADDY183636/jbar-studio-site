@@ -30,9 +30,9 @@ export default function Process() {
         {/* Centered label */}
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-10">
-            <span className="text-red">[ </span>
+            <span className="text-paper/30">[ </span>
             <span className="text-muted">03 / PROCESS</span>
-            <span className="text-red"> ]</span>
+            <span className="text-paper/30"> ]</span>
           </p>
         </Reveal>
 
@@ -55,7 +55,7 @@ export default function Process() {
           {steps.map((step, i) => (
             <Reveal key={step.number} delay={0.12 + i * 0.08}>
               <div className="bg-canvas-raised border border-paper/[0.07] p-7 rounded-sm h-full">
-                <p className="font-mono text-[0.58rem] tracking-[0.3em] uppercase text-red mb-6">
+                <p className="font-mono text-[0.58rem] tracking-[0.3em] uppercase text-paper/50 mb-6">
                   {step.number}
                 </p>
                 <h3

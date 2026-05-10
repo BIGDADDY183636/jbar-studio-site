@@ -7,9 +7,9 @@ export default function Studio() {
         {/* Centered label */}
         <Reveal>
           <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-center mb-10">
-            <span className="text-red">[ </span>
+            <span className="text-paper/30">[ </span>
             <span className="text-muted">04 / STUDIO</span>
-            <span className="text-red"> ]</span>
+            <span className="text-paper/30"> ]</span>
           </p>
         </Reveal>
 

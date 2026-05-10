@@ -168,11 +168,11 @@ export default function Hero() {
       <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-20 w-full text-center">
         {/* Booking status pill */}
         <div
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red/[0.07] border border-red/20 mb-8"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-paper/[0.04] border border-paper/40 mb-8"
           style={{ animation: "heroFadeIn 600ms ease 100ms both" }}
         >
           <div className="w-1.5 h-1.5 rounded-full bg-red animate-pulse flex-shrink-0" />
-          <span className="font-mono text-[0.56rem] tracking-[0.2em] uppercase text-red/70">
+          <span className="font-mono text-[0.56rem] tracking-[0.2em] uppercase text-paper/60">
             Booking now
           </span>
         </div>
@@ -251,14 +251,14 @@ export default function Hero() {
             Custom websites for Chicago&apos;s independent businesses.
           </h1>
 
-          <p className="font-mono text-[0.78rem] text-red mt-6 tracking-[0.18em] uppercase">
+          <p className="font-mono text-[0.78rem] text-paper/50 mt-6 tracking-[0.18em] uppercase">
             $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Live forever
           </p>
 
           <div className="flex justify-center mt-8">
             <a
               href="#contact"
-              className="btn-glow inline-flex items-center gap-2 font-sans text-[0.75rem] font-semibold tracking-[0.12em] uppercase bg-red text-paper px-7 py-3.5 rounded-full"
+              className="btn-glow inline-flex items-center gap-2 font-sans text-[0.75rem] font-semibold tracking-[0.12em] uppercase bg-paper text-canvas px-7 py-3.5 rounded-full"
             >
               Let&apos;s talk
               <span className="inline-block">→</span>

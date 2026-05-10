@@ -12,10 +12,10 @@ export default function Footer() {
           {/* Brand — Inter 900 wordmark */}
           <div>
             <p
-              className="font-sans font-black text-red mb-3 leading-none"
+              className="font-sans font-black mb-3 leading-none"
               style={{ fontSize: "0.9rem", letterSpacing: "-0.02em" }}
             >
-              JBAR
+              <span style={{ color: "#d63031" }}>J</span><span className="text-paper">BAR</span>
             </p>
             <p className="font-sans text-[0.8rem] text-muted leading-relaxed">
               Independent web studio.
@@ -50,7 +50,7 @@ export default function Footer() {
             </p>
             <a
               href="mailto:hello@jbar.studio"
-              className="nav-underline font-sans text-[0.82rem] text-muted hover:text-red transition-colors duration-150"
+              className="nav-underline font-sans text-[0.82rem] text-muted hover:text-paper transition-colors duration-150"
             >
               hello@jbar.studio
             </a>

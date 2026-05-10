@@ -75,7 +75,7 @@ export default function SectionCounter() {
           lineHeight: 1,
         }}
       >
-        <span style={{ color: "#d63031" }}>{section.number}</span>
+        <span style={{ color: "#f4f1ea" }}>{section.number}</span>
         <span style={{ color: "rgba(138,134,128,0.45)" }}> / {TOTAL}</span>
       </p>
       <p

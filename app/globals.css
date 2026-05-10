@@ -13,7 +13,7 @@
   }
 
   ::selection {
-    background-color: #d63031;
+    background-color: rgba(244, 241, 234, 0.2);
     color: #f4f1ea;
   }
 }
@@ -43,7 +43,7 @@
   left: 0;
   width: 0;
   height: 1px;
-  background-color: #d63031;
+  background-color: rgba(244, 241, 234, 0.6);
   transition: width 220ms ease;
 }
 .nav-underline:hover::after {
@@ -57,7 +57,7 @@
 }
 .btn-glow:hover {
   transform: scale(1.025);
-  box-shadow: 0 0 20px rgba(214, 48, 49, 0.22);
+  box-shadow: 0 0 20px rgba(244, 241, 234, 0.08);
 }
 
 /* ── Footer pulse line ──────────────────────────────── */

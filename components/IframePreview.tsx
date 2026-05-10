@@ -37,14 +37,14 @@ export default function IframePreview({ src, title, className = "" }: Props) {
       href={src}
       target="_blank"
       rel="noopener noreferrer"
-      className="block group focus:outline-none focus-visible:ring-2 focus-visible:ring-red rounded-[2px]"
+      className="block group focus:outline-none focus-visible:ring-2 focus-visible:ring-paper/40 rounded-[2px]"
       tabIndex={-1}
       aria-hidden="true"
     >
       {/* Lift + shadow on hover (item #9) */}
       <div
         ref={containerRef}
-        className={`relative w-full overflow-hidden rounded-[2px] ring-1 ring-red/20 shadow-[0_8px_48px_rgba(214,48,49,0.08)] transition-all duration-[250ms] ease-out group-hover:-translate-y-1 group-hover:shadow-[0_16px_52px_rgba(214,48,49,0.18)] ${className}`}
+        className={`relative w-full overflow-hidden rounded-[2px] ring-1 ring-paper/[0.10] shadow-[0_8px_48px_rgba(244,241,234,0.04)] transition-all duration-[250ms] ease-out group-hover:-translate-y-1 group-hover:shadow-[0_16px_52px_rgba(244,241,234,0.08)] ${className}`}
       >
         <iframe
           src={src}
@@ -68,11 +68,11 @@ export default function IframePreview({ src, title, className = "" }: Props) {
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[2px] pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(214,48,49,0.18) 0%, transparent 68%)",
+              "radial-gradient(ellipse at center, rgba(244,241,234,0.06) 0%, transparent 68%)",
           }}
         />
         {/* Hover: red ring */}
-        <div className="absolute inset-0 ring-2 ring-inset ring-transparent group-hover:ring-red/50 transition-all duration-300 rounded-[2px] pointer-events-none" />
+        <div className="absolute inset-0 ring-2 ring-inset ring-transparent group-hover:ring-paper/25 transition-all duration-300 rounded-[2px] pointer-events-none" />
       </div>
     </a>
   );

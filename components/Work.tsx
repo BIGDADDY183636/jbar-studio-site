@@ -64,13 +64,13 @@ export default function Work() {
   return (
     <>
       {/* Section header */}
-      <div id="work" className="bg-canvas border-t border-red/[0.12] py-12">
+      <div id="work" className="bg-canvas border-t border-paper/[0.08] py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <Reveal>
             <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase">
-              <span className="text-red">[ </span>
+              <span className="text-paper/30">[ </span>
               <span className="text-muted">01 / CONCEPT WORK</span>
-              <span className="text-red"> ]</span>
+              <span className="text-paper/30"> ]</span>
             </p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -82,7 +82,7 @@ export default function Work() {
       </div>
 
       {/* 2-column compact grid */}
-      <section className="border-t border-red/[0.12]">
+      <section className="border-t border-paper/[0.08]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2">
             {projects.map((p, i) => (
@@ -91,18 +91,18 @@ export default function Work() {
                 delay={i % 2 === 0 ? 0 : 0.08}
                 className={[
                   "px-8 py-10",
-                  "border-b border-red/[0.08]",
-                  i % 2 === 0 ? "md:border-r border-red/[0.08]" : "",
+                  "border-b border-paper/[0.06]",
+                  i % 2 === 0 ? "md:border-r border-paper/[0.06]" : "",
                   Math.floor(i / 2) % 2 === 0 ? "bg-canvas" : "bg-canvas-alt",
                 ].join(" ")}
               >
                 {/* Bracket label */}
                 <p className="font-mono text-[0.58rem] tracking-[0.2em] uppercase mb-5">
-                  <span className="text-red">[ </span>
+                  <span className="text-paper/30">[ </span>
                   <span className="text-muted">
                     {p.number} / {p.category}
                   </span>
-                  <span className="text-red"> ]</span>
+                  <span className="text-paper/30"> ]</span>
                 </p>
 
                 {/* Project name */}
@@ -133,7 +133,7 @@ export default function Work() {
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1.5 mt-5 font-sans text-[0.72rem] font-bold tracking-[0.16em] uppercase text-red hover:text-red-dark transition-colors duration-150"
+                  className="group inline-flex items-center gap-1.5 mt-5 font-sans text-[0.72rem] font-bold tracking-[0.16em] uppercase text-paper/55 hover:text-paper transition-colors duration-150"
                 >
                   View live site
                   <span className="inline-block group-hover:translate-x-1.5 transition-transform duration-150">

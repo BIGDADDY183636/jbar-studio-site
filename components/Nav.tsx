@@ -66,7 +66,7 @@ export default function Nav() {
               href={href}
               className={`nav-underline font-sans text-[0.72rem] font-medium tracking-wide transition-colors duration-200 ${
                 activeSection === label
-                  ? "text-red"
+                  ? "text-paper"
                   : "text-paper/45 hover:text-paper"
               }`}
             >
@@ -75,7 +75,7 @@ export default function Nav() {
           ))}
           <a
             href="#contact"
-            className="btn-glow font-sans text-[0.7rem] font-semibold tracking-[0.1em] bg-red text-paper px-4 py-2.5 rounded-full"
+            className="btn-glow font-sans text-[0.7rem] font-semibold tracking-[0.1em] bg-paper text-canvas px-4 py-2.5 rounded-full"
           >
             Start a project
           </a>
