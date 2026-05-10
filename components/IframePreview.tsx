@@ -44,7 +44,7 @@ export default function IframePreview({ src, title, className = "" }: Props) {
       {/* Lift + shadow on hover (item #9) */}
       <div
         ref={containerRef}
-        className={`relative w-full overflow-hidden rounded-[2px] ring-1 ring-red/20 shadow-[0_8px_48px_rgba(176,69,69,0.08)] transition-all duration-[250ms] ease-out group-hover:-translate-y-1 group-hover:shadow-[0_16px_52px_rgba(176,69,69,0.18)] ${className}`}
+        className={`relative w-full overflow-hidden rounded-[2px] ring-1 ring-red/20 shadow-[0_8px_48px_rgba(214,48,49,0.08)] transition-all duration-[250ms] ease-out group-hover:-translate-y-1 group-hover:shadow-[0_16px_52px_rgba(214,48,49,0.18)] ${className}`}
       >
         <iframe
           src={src}
@@ -68,7 +68,7 @@ export default function IframePreview({ src, title, className = "" }: Props) {
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[2px] pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(176,69,69,0.18) 0%, transparent 68%)",
+              "radial-gradient(ellipse at center, rgba(214,48,49,0.18) 0%, transparent 68%)",
           }}
         />
         {/* Hover: red ring */}

@@ -50,10 +50,10 @@ export default function StickyNav() {
         left: 0,
         right: 0,
         zIndex: 50,
-        background: "rgba(26,23,20,0.85)",
+        background: "rgba(10,9,8,0.85)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        borderBottom: "1px solid rgba(237,232,222,0.06)",
+        borderBottom: "1px solid rgba(244,241,234,0.06)",
         transform: visible ? "translateY(0)" : "translateY(-100%)",
         opacity: visible ? 1 : 0,
         transition:
@@ -86,8 +86,8 @@ export default function StickyNav() {
               letterSpacing: "-0.03em",
             }}
           >
-            <span style={{ color: "#b04545" }}>J</span>
-            <span style={{ color: "#ede8de" }}>BAR</span>
+            <span style={{ color: "#d63031" }}>J</span>
+            <span style={{ color: "#f4f1ea" }}>BAR</span>
           </span>
         </a>
 
@@ -113,8 +113,8 @@ export default function StickyNav() {
                     fontSize: "0.75rem",
                     letterSpacing: "0.04em",
                     color: isActive
-                      ? "#ede8de"
-                      : "rgba(237,232,222,0.45)",
+                      ? "#f4f1ea"
+                      : "rgba(244,241,234,0.45)",
                     textDecoration: "none",
                     paddingBottom: "2px",
                     transition: "color 150ms ease",
@@ -129,7 +129,7 @@ export default function StickyNav() {
                         left: 0,
                         width: "100%",
                         height: "1px",
-                        background: "#b04545",
+                        background: "#d63031",
                       }}
                     />
                   )}
@@ -147,8 +147,8 @@ export default function StickyNav() {
               fontWeight: 600,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              background: "#b04545",
-              color: "#ede8de",
+              background: "#d63031",
+              color: "#f4f1ea",
               padding: "0.45rem 1rem",
               borderRadius: "9999px",
               textDecoration: "none",
@@ -156,10 +156,10 @@ export default function StickyNav() {
               whiteSpace: "nowrap",
             }}
             onMouseEnter={(e) =>
-              ((e.target as HTMLElement).style.background = "#973b3b")
+              ((e.target as HTMLElement).style.background = "#b82828")
             }
             onMouseLeave={(e) =>
-              ((e.target as HTMLElement).style.background = "#b04545")
+              ((e.target as HTMLElement).style.background = "#d63031")
             }
           >
             Start a project
