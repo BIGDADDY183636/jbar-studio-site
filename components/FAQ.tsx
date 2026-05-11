@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     q: "What if I need changes after launch?",
-    a: "The first 30 days after launch are free for small edits. After that, optional Care Plan ($20/month — 30 minutes of changes, priority support, domain renewal covered).",
+    a: "The first 30 days after launch are free for small edits. After that, optional Care Plan ($20/month) for ongoing small edits and priority support.",
   },
   {
     q: "Can I talk to a real client?",
