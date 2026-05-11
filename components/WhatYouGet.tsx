@@ -99,6 +99,23 @@ export default function WhatYouGet() {
             </Reveal>
           </div>
         </div>
+
+        {/* Why $400 callout */}
+        <Reveal delay={0.45}>
+          <div className="mt-16 max-w-2xl mx-auto bg-canvas border border-paper/[0.07] rounded-sm p-8">
+            <p className="font-mono text-[0.58rem] tracking-[0.2em] uppercase text-paper/30 mb-4">
+              Why $400?
+            </p>
+            <p className="font-sans text-[0.84rem] text-muted leading-relaxed">
+              I&apos;m 13, this is my craft, and I&apos;m building a portfolio
+              I&apos;m proud of. No overhead, no agency markup, no salespeople —
+              just me coding your site and my dad keeping the business side
+              tight. You get the same quality most agencies charge $2,000+ for.
+              The price reflects where I am in my career, not the quality of the
+              work.
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
