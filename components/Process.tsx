@@ -14,7 +14,7 @@ const steps = [
   {
     number: "03",
     title: "Build",
-    desc: "One round of revisions on the design, then I build. No feature creep. No moving targets.",
+    desc: "Two rounds of revisions on the design, then I build. No feature creep. No moving targets.",
   },
   {
     number: "04",
