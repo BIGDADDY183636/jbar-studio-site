@@ -255,6 +255,10 @@ export default function Hero() {
             $400&ensp;·&ensp;Built in a week&ensp;·&ensp;Yours to keep
           </p>
 
+          <p className="font-sans text-[0.78rem] text-muted/70 mt-3 leading-relaxed max-w-sm mx-auto">
+            Booking my first paid clients — early projects get priority slots and an extra round of revisions.
+          </p>
+
           <div className="flex justify-center mt-8">
             <a
               href="#contact"
