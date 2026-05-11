@@ -44,7 +44,7 @@ export default function IframePreview({ src, title, className = "" }: Props) {
       {/* Lift + shadow on hover (item #9) */}
       <div
         ref={containerRef}
-        className={`relative w-full overflow-hidden rounded-[2px] ring-1 ring-paper/[0.10] shadow-[0_8px_48px_rgba(244,241,234,0.04)] transition-all duration-[250ms] ease-out group-hover:-translate-y-1 group-hover:shadow-[0_16px_52px_rgba(244,241,234,0.08)] ${className}`}
+        className={`project-screenshot relative w-full overflow-hidden rounded-[20px] ring-1 ring-paper/[0.10] shadow-[0_8px_48px_rgba(244,241,234,0.04)] transition-[box-shadow] duration-[250ms] ease-out group-hover:shadow-[0_16px_52px_rgba(244,241,234,0.08)] ${className}`}
       >
         <iframe
           src={src}

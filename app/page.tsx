@@ -9,11 +9,13 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SectionCounter from "@/components/SectionCounter";
 import StickyNav from "@/components/StickyNav";
+import ScreenshotReveal from "@/components/ScreenshotReveal";
 import FooterManifesto from "@/components/FooterManifesto";
 
 export default function Home() {
   return (
     <>
+      <ScreenshotReveal />
       <Nav />
       <StickyNav />
       <SectionCounter />
