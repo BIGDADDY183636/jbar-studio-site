@@ -1,6 +1,14 @@
 import IframePreview from "@/components/IframePreview";
 import Reveal from "@/components/Reveal";
 
+const clientWork = {
+  name: "DJE Advisors",
+  category: "Accounting Firm",
+  description:
+    "Independent accounting firm — Chicago. Tax compliance, advisory, and accounting services for business owners, families, and individuals.",
+  url: "https://dje.jbar.studio",
+};
+
 const projects = [
   {
     number: "01",
@@ -63,13 +71,81 @@ const projects = [
 export default function Work() {
   return (
     <>
-      {/* Section header */}
+      {/* ── Client Work header ── */}
       <div id="work" className="bg-canvas border-t border-paper/[0.08] py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <Reveal>
             <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase">
               <span className="text-paper/30">[ </span>
-              <span className="text-muted">01 / CONCEPT WORK</span>
+              <span className="text-red">CLIENT WORK</span>
+              <span className="text-paper/30"> ]</span>
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="font-mono text-[0.56rem] tracking-[0.12em] text-muted/40 mt-3">
+              Live work for real clients.
+            </p>
+          </Reveal>
+        </div>
+      </div>
+
+      {/* ── DJE Advisors — full-width client work card ── */}
+      <section className="border-t border-paper/[0.08]">
+        <div className="max-w-7xl mx-auto">
+          <Reveal className="px-8 py-10 bg-canvas border-b border-paper/[0.06]">
+            {/* Label */}
+            <p className="font-mono text-[0.58rem] tracking-[0.2em] uppercase mb-5">
+              <span className="text-paper/30">[ </span>
+              <span className="text-red">CLIENT WORK / {clientWork.category}</span>
+              <span className="text-paper/30"> ]</span>
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+              {/* Left: meta */}
+              <div>
+                <h2
+                  className="font-sans font-black text-paper leading-none mb-3"
+                  style={{
+                    fontSize: "clamp(1.8rem, 2.8vw, 2.4rem)",
+                    letterSpacing: "-0.03em",
+                  }}
+                >
+                  {clientWork.name}
+                </h2>
+                <p className="font-sans text-[0.82rem] text-muted mb-6 max-w-xs leading-relaxed">
+                  {clientWork.description}
+                </p>
+                <a
+                  href={clientWork.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-1.5 font-sans text-[0.72rem] font-bold tracking-[0.16em] uppercase text-paper/55 hover:text-paper transition-colors duration-150"
+                >
+                  View live site
+                  <span className="inline-block group-hover:translate-x-1.5 transition-transform duration-150">
+                    →
+                  </span>
+                </a>
+              </div>
+
+              {/* Right: iframe preview */}
+              <IframePreview
+                src={clientWork.url}
+                title={clientWork.name}
+                className="h-[210px]"
+              />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Concept Work header ── */}
+      <div className="bg-canvas border-t border-paper/[0.08] py-12">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <Reveal>
+            <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase">
+              <span className="text-paper/30">[ </span>
+              <span className="text-muted">CONCEPT WORK</span>
               <span className="text-paper/30"> ]</span>
             </p>
           </Reveal>
@@ -81,7 +157,7 @@ export default function Work() {
         </div>
       </div>
 
-      {/* 2-column compact grid */}
+      {/* ── Concept builds 2-col grid ── */}
       <section className="border-t border-paper/[0.08]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2">
