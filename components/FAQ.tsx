@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: "Can I talk to a real client?",
-    a: "Not yet — I'm a new studio and you'd be among my first. The concept builds shown above are designed to demonstrate range, but I'm honest that I haven't shipped to a paying client yet. I'm offering aggressive pricing because of that.",
+    a: "Yes — DJE Advisors (dje.jbar.studio) is my first live client. The other examples on this site are concept builds I designed to demonstrate range. I'm still in the early-client window, so you'd be among my first handful — which is why the pricing is what it is.",
   },
   {
     q: "What if I want to leave or hire someone else?",
