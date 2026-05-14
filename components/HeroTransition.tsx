@@ -174,8 +174,8 @@ export default function HeroTransition() {
     function update() {
       const outerRect = outer!.getBoundingClientRect();
       const scrolled  = -outerRect.top;
-      // 200vh outer → 100vh travel → raw 0→1 over 1×innerHeight
-      const raw = Math.max(0, Math.min(scrolled / window.innerHeight, 1));
+      // 130vh outer → 30vh travel → raw 0→1 over 0.3×innerHeight
+      const raw = Math.max(0, Math.min(scrolled / (0.3 * window.innerHeight), 1));
 
       const [j, b, a, r] = letterRefs.current;
       if (!j || !b || !a || !r) { raf = 0; return; }
