@@ -134,6 +134,9 @@ export default function HeroTransition() {
     function startAutoplay() {
       autoplayed = true;
       window.removeEventListener("scroll", onScroll);
+      // Block scroll for the entire autoplay + snap so momentum / user input
+      // can't interfere during the 400ms animation or the collapse frame.
+      document.body.style.overflow = "hidden";
       const t0 = performance.now();
 
       function tick(now: number) {
@@ -155,17 +158,21 @@ export default function HeroTransition() {
           autoplayRaf = requestAnimationFrame(tick);
         } else {
           autoplayRaf = 0;
-          // Correct collapse math:
-          //   scrollY + innerHeight = document position of viewport bottom
-          //   outer.offsetTop       = outer's document position (not viewport)
-          //   collapseH             = height that puts outer's bottom exactly
-          //                          at the current viewport bottom
+          // 1. Collapse: scrollY + innerHeight - offsetTop puts outer's bottom
+          //    exactly at the current viewport bottom (correct document coords).
           const collapseH = Math.round(window.scrollY + window.innerHeight - outer!.offsetTop) + 1;
           outer!.style.height = `${collapseH}px`;
-          void outer!.getBoundingClientRect(); // force layout / sticky recalc
-          // Snap scroll to top of Work (outer bottom = where Work starts)
+          // 2. Force synchronous layout so sticky re-evaluates before scrollTo.
+          void outer!.offsetHeight;
+          // 3. Snap scroll to Work's top edge — outer.offsetTop + offsetHeight
+          //    is exactly where Work begins after the collapse.
           window.scrollTo({ top: outer!.offsetTop + outer!.offsetHeight, behavior: "instant" });
-          window.addEventListener("scroll", onScroll, { passive: true });
+          // 4. Restore scroll and re-attach listener in the next frame so the
+          //    scrollTo has settled before any scroll events can fire.
+          requestAnimationFrame(() => {
+            document.body.style.overflow = "";
+            window.addEventListener("scroll", onScroll, { passive: true });
+          });
         }
       }
       autoplayRaf = requestAnimationFrame(tick);
@@ -284,6 +291,7 @@ export default function HeroTransition() {
       if (raf) cancelAnimationFrame(raf);
       if (autoplayRaf) cancelAnimationFrame(autoplayRaf);
       clearTimeout(resizeTimer);
+      document.body.style.overflow = ""; // restore if unmounted mid-autoplay
     };
   }, [scrollEnabled]);
 
