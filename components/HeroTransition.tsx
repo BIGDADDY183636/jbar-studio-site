@@ -145,11 +145,12 @@ export default function HeroTransition() {
         if (a) {
           anchor!.style.transform = `scale(${4 + u * 40})`;
           a.style.transform = `rotate(${540 + u * 600}deg)`;
-          a.style.color = "#00A7E1";
+          a.style.color = "#c8102e";
         }
-        const bgG = Math.round(u * 167);
-        const bgB = Math.round(u * 225);
-        bgOverlay!.style.backgroundColor = `rgb(0,${bgG},${bgB})`;
+        const bgR = Math.round(u * 200);
+        const bgG = Math.round(u * 16);
+        const bgB = Math.round(u * 46);
+        bgOverlay!.style.backgroundColor = `rgb(${bgR},${bgG},${bgB})`;
         bgOverlay!.style.opacity = String(u);
         content!.style.opacity = String(Math.max(0, 1 - u));
         workOverlay!.style.opacity = String(Math.min(u * 1.4, 1));
@@ -196,7 +197,7 @@ export default function HeroTransition() {
 
       if (autoplayed) {
         // Hold blow-through at completion; don't disturb anchor/a transforms
-        bgOverlay!.style.backgroundColor = "rgb(0,167,225)";
+        bgOverlay!.style.backgroundColor = "rgb(200,16,46)";
         bgOverlay!.style.opacity = "1";
         content!.style.opacity = "0";
         workOverlay!.style.opacity = "1";
@@ -218,15 +219,15 @@ export default function HeroTransition() {
       // ── A rotation — ease-in (t²) ──────────────────────────
       const aRotate = raw <= 0.15 ? 0 : pSpin * pSpin * 540;  // 0→540deg
 
-      // ── A color — white → #00A7E1 over spin ───────────────
-      // rgb(0,167,225); deltas from white: r:−255, g:−88, b:−30
+      // ── A color — white → #c8102e over spin ───────────────
+      // rgb(200,16,46); deltas from white: r:−55, g:−239, b:−209
       let aColor: string;
       if (raw <= 0.15) {
         aColor = "rgb(255,255,255)";
       } else {
-        const cr = Math.round(255 - pSpin * 255);
-        const cg = Math.round(255 - pSpin * 88);
-        const cb = Math.round(255 - pSpin * 30);
+        const cr = Math.round(255 - pSpin * 55);
+        const cg = Math.round(255 - pSpin * 239);
+        const cb = Math.round(255 - pSpin * 209);
         aColor = `rgb(${cr},${cg},${cb})`;
       }
 
@@ -543,6 +544,7 @@ export default function HeroTransition() {
           ref={workOverlayRef}
           style={{
             position: "absolute", inset: 0,
+            backgroundColor: "#0a0908",
             opacity: 0,
             zIndex: 3, pointerEvents: "none",
             overflowY: "auto",
