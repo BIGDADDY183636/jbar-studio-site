@@ -155,24 +155,16 @@ export default function HeroTransition() {
           autoplayRaf = requestAnimationFrame(tick);
         } else {
           autoplayRaf = 0;
-          const outerTop    = outer!.getBoundingClientRect().top;
-          const ih          = window.innerHeight;
-          const sy          = window.scrollY;
-          const collapseH   = Math.round(ih - outerTop) - 1;
-          const beforeH     = outer!.offsetHeight;
-          // Collapse outer height so sticky releases immediately.
-          // outer_bottom = outerTop + height; sticky releases when ≤ innerHeight.
-          // Subtract 1px past the boundary; force a sync layout read so the
-          // browser re-evaluates sticky before the next scroll event fires.
-          if (outerTop <= 0) {
-            outer!.style.height = `${collapseH}px`;
-            void outer!.getBoundingClientRect(); // force layout / sticky recalc
-          }
-          const afterH = outer!.offsetHeight;
-          console.log("[autoplay done]", {
-            outerTop, innerHeight: ih, scrollY: sy,
-            collapseH, beforeH, afterH,
-          });
+          // Correct collapse math:
+          //   scrollY + innerHeight = document position of viewport bottom
+          //   outer.offsetTop       = outer's document position (not viewport)
+          //   collapseH             = height that puts outer's bottom exactly
+          //                          at the current viewport bottom
+          const collapseH = Math.round(window.scrollY + window.innerHeight - outer!.offsetTop) + 1;
+          outer!.style.height = `${collapseH}px`;
+          void outer!.getBoundingClientRect(); // force layout / sticky recalc
+          // Snap scroll to top of Work (outer bottom = where Work starts)
+          window.scrollTo({ top: outer!.offsetTop + outer!.offsetHeight, behavior: "instant" });
           window.addEventListener("scroll", onScroll, { passive: true });
         }
       }
