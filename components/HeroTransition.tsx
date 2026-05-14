@@ -312,6 +312,7 @@ export default function HeroTransition() {
   // Normal document flow, no 300vh wrapper, Work follows immediately.
   if (!scrollEnabled) {
     return (
+    <>
       <section
         id="hero"
         className="relative min-h-[88vh] flex flex-col items-center justify-center bg-canvas overflow-hidden"
@@ -408,6 +409,8 @@ export default function HeroTransition() {
           />
         </div>
       </section>
+      <Work />
+    </>
     );
   }
 
