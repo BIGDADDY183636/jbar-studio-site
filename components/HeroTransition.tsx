@@ -34,7 +34,7 @@ export default function HeroTransition() {
   const bgOverlayRef  = useRef<HTMLDivElement>(null);
   const workOverlayRef= useRef<HTMLDivElement>(null);
 
-  // Letter refs used by the count-up animation in both branches
+  // Letter refs — used by entrance animation sampling and scroll JS
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([null, null, null, null]);
   const slotCallbacks = useRef(
     LETTERS.map((_, i) => (el: HTMLSpanElement | null) => {
@@ -42,10 +42,21 @@ export default function HeroTransition() {
     })
   );
 
-  // ── Entrance complete: show letters then tagline ───────────
+  // Tracks whether entrance animation has completed. Read inside the scroll
+  // effect closure (stable ref, always current) to gate opacity writes.
+  const wordmarkVisibleRef = useRef(false);
+
+  // ── Entrance complete: make all letters visible, then show tagline ─
   const handleEntranceComplete = useCallback(() => {
+    wordmarkVisibleRef.current = true;
+    // Force all four spans visible via direct DOM — same approach the scroll
+    // JS uses for J/B/R. Bypasses React's render cycle so A is guaranteed
+    // visible immediately even if a scroll tick races the state update.
+    letterRefs.current.forEach(span => {
+      if (span) span.style.opacity = "1";
+    });
     setWordmarkVisible(true);
-    setTimeout(() => setShowSub(true), 600); // wait for 600ms letter crossfade
+    setTimeout(() => setShowSub(true), 600);
   }, []);
 
   // ── 1. Detect scroll capability — re-check on resize ────────
@@ -195,10 +206,14 @@ export default function HeroTransition() {
       anchor!.style.transform = `scale(${scale})`;
       a.style.transform       = `rotate(${aRotate}deg)`;
       a.style.color           = aColor;
-      j.style.opacity         = String(jbrOpacity);
-      b.style.opacity         = String(jbrOpacity);
-      r.style.opacity         = String(jbrOpacity);
-      sub!.style.opacity      = String(subOpacity);
+      // Gate opacity writes until entrance animation completes.
+      // Before that, React owns opacity for all spans (all start at 0).
+      if (wordmarkVisibleRef.current) {
+        j.style.opacity    = String(jbrOpacity);
+        b.style.opacity    = String(jbrOpacity);
+        r.style.opacity    = String(jbrOpacity);
+        sub!.style.opacity = String(subOpacity);
+      }
 
       // ── Trigger autoplay once at raw ≥ 0.98 ────────────────
       if (raw >= 0.98) startAutoplay();
