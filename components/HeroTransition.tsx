@@ -113,91 +113,123 @@ export default function HeroTransition() {
     };
   }, []);
 
-  // ── 3. Scroll-driven animation (desktop only) ───────────────
+  // ── 3. Scroll-driven animation + autoplay blow-through ────────
   useEffect(() => {
     if (!scrollEnabled) return;
 
-    const outer      = outerRef.current;
-    const anchor     = anchorRef.current;
-    const content    = contentRef.current;
-    const sub        = subRef.current;
-    const bgOverlay  = bgOverlayRef.current;
-    const workOverlay= workOverlayRef.current;
+    const outer       = outerRef.current;
+    const anchor      = anchorRef.current;
+    const content     = contentRef.current;
+    const sub         = subRef.current;
+    const bgOverlay   = bgOverlayRef.current;
+    const workOverlay = workOverlayRef.current;
     if (!outer || !anchor || !content || !sub || !bgOverlay || !workOverlay) return;
 
     let raf = 0;
+    let autoplayRaf = 0;
+    let autoplayed = false;
 
     function measureA() {
       const a = letterRefs.current[2];
       if (!anchor || !a) return;
-      const aRect     = a.getBoundingClientRect();
-      const anchorRect= anchor.getBoundingClientRect();
+      const aRect      = a.getBoundingClientRect();
+      const anchorRect = anchor.getBoundingClientRect();
       anchor.style.transformOrigin =
         `${aRect.left - anchorRect.left + aRect.width / 2}px center`;
+    }
+
+    // Autoplay: 400ms rAF loop driving the blow-through.
+    // Called once scroll listener is detached so there's no conflict.
+    function startAutoplay() {
+      autoplayed = true;
+      window.removeEventListener("scroll", onScroll);
+      const t0 = performance.now();
+
+      function tick(now: number) {
+        const u = Math.min((now - t0) / 400, 1);
+        const a = letterRefs.current[2];
+        if (a) {
+          anchor!.style.transform = `scale(${4 + u * 40})`;
+          a.style.transform = `rotate(${540 + u * 600}deg)`;
+          a.style.color = "#00A7E1";
+        }
+        const bgG = Math.round(u * 167);
+        const bgB = Math.round(u * 225);
+        bgOverlay!.style.backgroundColor = `rgb(0,${bgG},${bgB})`;
+        bgOverlay!.style.opacity = String(u);
+        content!.style.opacity = String(Math.max(0, 1 - u));
+        workOverlay!.style.opacity = String(Math.min(u * 1.4, 1));
+
+        if (u < 1) {
+          autoplayRaf = requestAnimationFrame(tick);
+        } else {
+          autoplayRaf = 0;
+          // Re-attach so scroll-back detection works
+          window.addEventListener("scroll", onScroll, { passive: true });
+        }
+      }
+      autoplayRaf = requestAnimationFrame(tick);
     }
 
     function update() {
       const outerRect = outer!.getBoundingClientRect();
       const scrolled  = -outerRect.top;
-      const raw = Math.max(0, Math.min(scrolled / (2 * window.innerHeight), 1));
+      // 200vh outer → 100vh travel → raw 0→1 over 1×innerHeight
+      const raw = Math.max(0, Math.min(scrolled / window.innerHeight, 1));
 
       const [j, b, a, r] = letterRefs.current;
       if (!j || !b || !a || !r) { raf = 0; return; }
 
-      // ── Phase progress (0→1 each) ──────────────────────────
-      // settle 0.00–0.10 | spin 0.10–0.70 | blow 0.70–1.00
-      const pSettle = Math.min(raw / 0.10, 1);
-      const pSpin   = Math.max(0, Math.min((raw - 0.10) / 0.60, 1));
-      const pBlow   = Math.max(0, Math.min((raw - 0.70) / 0.30, 1));
+      // Reset flag when user scrolls well back — allows re-trigger
+      if (autoplayed && raw < 0.5) autoplayed = false;
+
+      if (autoplayed) {
+        // Hold blow-through at completion; don't disturb anchor/a
+        bgOverlay!.style.backgroundColor = "rgb(0,167,225)";
+        bgOverlay!.style.opacity = "1";
+        content!.style.opacity = "0";
+        workOverlay!.style.opacity = "1";
+        raf = 0;
+        return;
+      }
+
+      // ── Phase progress ─────────────────────────────────────
+      // settle 0.00–0.15 | spin 0.15–1.00
+      const pSettle = Math.min(raw / 0.15, 1);
+      const pSpin   = Math.max(0, Math.min((raw - 0.15) / 0.85, 1));
 
       // ── Scale ──────────────────────────────────────────────
-      let scale: number;
-      if (raw <= 0.10)       scale = 1 + pSettle * 0.2;   // 1→1.2
-      else if (raw <= 0.70)  scale = 1.2 + pSpin * 2.8;   // 1.2→4
-      else                    scale = 4 + pBlow * 40;      // 4→44
+      const scale = raw <= 0.15
+        ? 1 + pSettle * 0.2       // 1→1.2
+        : 1.2 + pSpin * 2.8;      // 1.2→4
 
-      // ── A rotation — ease-in across spin, continues in blow ─
-      let aRotate: number;
-      if (raw <= 0.10) {
-        aRotate = 0;
-      } else if (raw <= 0.70) {
-        aRotate = pSpin * pSpin * 540;    // ease-in 0→540deg
-      } else {
-        aRotate = 540 + pBlow * 600;      // 540→1140deg
-      }
+      // ── A rotation — ease-in (t²) ──────────────────────────
+      const aRotate = raw <= 0.15 ? 0 : pSpin * pSpin * 540;  // 0→540deg
 
       // ── A color — white → #00A7E1 over spin ───────────────
       // rgb(0,167,225); deltas from white: r:−255, g:−88, b:−30
       let aColor: string;
-      if (raw <= 0.10) {
+      if (raw <= 0.15) {
         aColor = "rgb(255,255,255)";
-      } else if (raw <= 0.70) {
+      } else {
         const cr = Math.round(255 - pSpin * 255);
         const cg = Math.round(255 - pSpin * 88);
         const cb = Math.round(255 - pSpin * 30);
         aColor = `rgb(${cr},${cg},${cb})`;
-      } else {
-        aColor = "#00A7E1";
       }
 
-      // ── J/B/R — fully out by raw=0.55 (pSpin=0.75) ────────
-      const jbrOpacity = raw <= 0.10 ? 1 : Math.max(0, 1 - pSpin / 0.75);
+      // ── J/B/R — out by pSpin ≈ 0.6 ────────────────────────
+      const jbrOpacity = raw <= 0.15 ? 1 : Math.max(0, 1 - pSpin / 0.6);
 
-      // ── Tagline+CTA — 1→0.7 in settle, 0.7→0 over spin ───
-      let subOpacity: number;
-      if (raw <= 0.10)       subOpacity = 1 - pSettle * 0.3;  // 1→0.7
-      else if (raw <= 0.70)  subOpacity = 0.7 * (1 - pSpin);  // 0.7→0
-      else                    subOpacity = 0;
+      // ── Tagline — 1→0.7 in settle, 0.7→0 over spin ────────
+      const subOpacity = raw <= 0.15
+        ? 1 - pSettle * 0.3
+        : Math.max(0, 0.7 * (1 - pSpin));
 
-      // ── Blow-through: bg flood, content fade, work veil ───
-      const bgG = Math.round(pBlow * 167);
-      const bgB = Math.round(pBlow * 225);
-      bgOverlay!.style.backgroundColor = `rgb(0,${bgG},${bgB})`;
-      bgOverlay!.style.opacity = raw < 0.70 ? "0" : String(pBlow);
-
-      content!.style.opacity = raw < 0.70 ? "1" : String(Math.max(0, 1 - pBlow));
-
-      workOverlay!.style.opacity = raw < 0.70 ? "0" : String(Math.min(pBlow * 1.4, 1));
+      // ── Pre-autoplay: blow elements cleared ────────────────
+      bgOverlay!.style.opacity = "0";
+      content!.style.opacity = "1";
+      workOverlay!.style.opacity = "0";
 
       // ── Apply ───────────────────────────────────────────────
       anchor!.style.transform = `scale(${scale})`;
@@ -207,6 +239,9 @@ export default function HeroTransition() {
       b.style.opacity         = String(jbrOpacity);
       r.style.opacity         = String(jbrOpacity);
       sub!.style.opacity      = String(subOpacity);
+
+      // ── Trigger autoplay once at raw ≥ 0.98 ────────────────
+      if (raw >= 0.98) startAutoplay();
 
       raf = 0;
     }
@@ -231,6 +266,7 @@ export default function HeroTransition() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       if (raf) cancelAnimationFrame(raf);
+      if (autoplayRaf) cancelAnimationFrame(autoplayRaf);
       clearTimeout(resizeTimer);
     };
   }, [scrollEnabled]);
