@@ -99,9 +99,10 @@ export default function HeroTransition() {
 
   // ── Scroll-driven animation ─────────────────────────────────
   useEffect(() => {
-    // Skip on reduced-motion or mobile (mobile uses CSS-only animation)
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (window.innerWidth < 768) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768;
+    console.log("[HeroTransition] effect init — innerWidth:", window.innerWidth, "| reducedMotion:", reducedMotion, "| mobile skip:", isMobile);
+    if (reducedMotion || isMobile) return;
 
     const outer = outerRef.current;
     const anchor = anchorRef.current;
@@ -109,9 +110,11 @@ export default function HeroTransition() {
     const sub = subRef.current;
     const bgOverlay = bgOverlayRef.current;
     const workOverlay = workOverlayRef.current;
+    console.log("[HeroTransition] refs — outer:", !!outer, "anchor:", !!anchor, "content:", !!content, "sub:", !!sub);
     if (!outer || !anchor || !content || !sub || !bgOverlay || !workOverlay) return;
 
     let raf = 0;
+    let tickCount = 0;
 
     function measureA() {
       const a = letterRefs.current[2];
@@ -129,6 +132,13 @@ export default function HeroTransition() {
       const raw = Math.max(0, Math.min(scrolled / (2 * window.innerHeight), 1));
 
       const [j, b, a, r] = letterRefs.current;
+
+      // Log every tick (throttled to first 5, then every 30)
+      tickCount++;
+      if (tickCount <= 5 || tickCount % 30 === 0) {
+        console.log(`[HeroTransition] tick #${tickCount} raw=${raw.toFixed(4)} scrolled=${scrolled.toFixed(0)} outerTop=${outerRect.top.toFixed(0)} refs=[${!!j},${!!b},${!!a},${!!r}]`);
+      }
+
       if (!j || !b || !a || !r) { raf = 0; return; }
 
       // Normalised phase progress, each 0→1
@@ -193,7 +203,12 @@ export default function HeroTransition() {
       raf = 0;
     }
 
+    let firstScroll = true;
     function onScroll() {
+      if (firstScroll) {
+        console.log("[HeroTransition] first scroll event fired — innerWidth:", window.innerWidth, "scrollY:", window.scrollY);
+        firstScroll = false;
+      }
       if (!raf) raf = requestAnimationFrame(update);
     }
 
