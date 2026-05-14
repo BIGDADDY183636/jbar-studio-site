@@ -52,12 +52,17 @@ export default function HeroTransition() {
     })
   );
 
-  // ── 1. Detect scroll capability once on mount ───────────────
+  // ── 1. Detect scroll capability — re-check on resize ────────
   useEffect(() => {
-    setScrollEnabled(
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
-      window.innerWidth >= 768
-    );
+    function check() {
+      setScrollEnabled(
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        window.innerWidth >= 1100
+      );
+    }
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
   }, []);
 
   // ── 2. Count-up animation (runs in both branches) ───────────
@@ -146,22 +151,22 @@ export default function HeroTransition() {
 
       // ── Scale (.wm-anchor) ─────────────────────────────────
       let scale: number;
-      if (raw <= 0.25)       scale = 1 + p1 * 4;       // 1→5
-      else if (raw <= 0.78)  scale = 5 + p2 * 7;       // 5→12
-      else                    scale = 12 + p3 * 32;     // 12→44
+      if (raw <= 0.25)       scale = 1 + p1 * 1;       // 1→2
+      else if (raw <= 0.78)  scale = 2 + p2 * 2;       // 2→4
+      else                    scale = 4 + p3 * 40;      // 4→44
 
       // ── A rotation ─────────────────────────────────────────
       // Starts at raw=0.10 (while A is still readable).
-      // 0.10→0.78: ease-in (t²) 0→900deg.
-      // P3 adds +1500deg on top.
+      // 0.10→0.78: ease-in (t²) 0→540deg.
+      // P3 adds +600deg on top.
       let aRotate: number;
       if (raw <= 0.10) {
         aRotate = 0;
       } else if (raw <= 0.78) {
         const t = (raw - 0.10) / 0.68;   // 0→1 across 0.10–0.78
-        aRotate = t * t * 900;            // ease-in
+        aRotate = t * t * 540;            // ease-in
       } else {
-        aRotate = 900 + p3 * 1500;        // 900→2400deg
+        aRotate = 540 + p3 * 600;         // 540→1140deg
       }
 
       // ── A color — white → #00A7E1 over P2 ─────────────────
