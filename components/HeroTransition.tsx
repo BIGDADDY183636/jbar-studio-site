@@ -72,6 +72,15 @@ export default function HeroTransition() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  // Reset entrance state when the active branch switches (e.g. plain→scroll on
+  // desktop). Without this, HeroEntrance in the brief plain-hero render fires
+  // onComplete before scrollEnabled flips, leaving wordmarkVisible=true so the
+  // scroll branch inherits already-visible letters.
+  useEffect(() => {
+    setWordmarkVisible(false);
+    wordmarkVisibleRef.current = false;
+  }, [scrollEnabled]);
+
   // ── 2. Scroll-driven animation + autoplay blow-through ────────
   useEffect(() => {
     if (!scrollEnabled) return;
