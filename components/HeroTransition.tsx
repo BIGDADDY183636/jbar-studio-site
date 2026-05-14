@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Work from "@/components/Work";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
 const DIGIT_MS = 70;
@@ -128,16 +129,14 @@ export default function HeroTransition() {
     let raf = 0;
     let autoplayRaf = 0;
     let autoplayed = false;
-    let snapTimer = 0;
 
     // Autoplay: 400ms rAF loop driving the blow-through.
     // Scroll listener detached before start; re-attached on completion.
+    // No scroll/collapse at the end — Work content is inside the overlay,
+    // so it's already in view when autoplay finishes.
     function startAutoplay() {
       autoplayed = true;
       window.removeEventListener("scroll", onScroll);
-      // Block scroll for the entire autoplay + snap so momentum / user input
-      // can't interfere during the 400ms animation or the collapse frame.
-      document.body.style.overflow = "hidden";
       const t0 = performance.now();
 
       function tick(now: number) {
@@ -159,21 +158,9 @@ export default function HeroTransition() {
           autoplayRaf = requestAnimationFrame(tick);
         } else {
           autoplayRaf = 0;
-          // 1. Collapse: scrollY + innerHeight - offsetTop puts outer's bottom
-          //    exactly at the current viewport bottom (correct document coords).
-          const collapseH = Math.round(window.scrollY + window.innerHeight - outer!.offsetTop) + 1;
-          outer!.style.height = `${collapseH}px`;
-          // 2. Force synchronous layout so sticky re-evaluates before scrollTo.
-          void outer!.offsetHeight;
-          // 3. Snap scroll to Work's top edge — outer.offsetTop + offsetHeight
-          //    is exactly where Work begins after the collapse.
-          window.scrollTo({ top: outer!.offsetTop + outer!.offsetHeight, behavior: "smooth" });
-          // 4. Restore scroll and re-attach listener after smooth scroll settles
-          //    (~300ms). overflow stays hidden so nothing interferes mid-scroll.
-          snapTimer = window.setTimeout(() => {
-            document.body.style.overflow = "";
-            window.addEventListener("scroll", onScroll, { passive: true });
-          }, 400);
+          // Work content is now visible; enable pointer events on overlay.
+          workOverlay!.style.pointerEvents = "auto";
+          window.addEventListener("scroll", onScroll, { passive: true });
         }
       }
       autoplayRaf = requestAnimationFrame(tick);
@@ -201,10 +188,10 @@ export default function HeroTransition() {
         anchor!.style.transformOrigin = `${pct.toFixed(2)}% center`;
       }
 
-      // Reset flag + restore outer height when user scrolls well back
+      // Reset flag when user scrolls well back — re-hides Work overlay
       if (autoplayed && raw < 0.5) {
         autoplayed = false;
-        outer!.style.height = ""; // restore CSS 130vh
+        workOverlay!.style.pointerEvents = "none";
       }
 
       if (autoplayed) {
@@ -213,6 +200,7 @@ export default function HeroTransition() {
         bgOverlay!.style.opacity = "1";
         content!.style.opacity = "0";
         workOverlay!.style.opacity = "1";
+        workOverlay!.style.pointerEvents = "auto";
         raf = 0;
         return;
       }
@@ -292,8 +280,6 @@ export default function HeroTransition() {
       if (raf) cancelAnimationFrame(raf);
       if (autoplayRaf) cancelAnimationFrame(autoplayRaf);
       clearTimeout(resizeTimer);
-      clearTimeout(snapTimer);
-      document.body.style.overflow = ""; // restore if unmounted mid-autoplay
     };
   }, [scrollEnabled]);
 
@@ -549,16 +535,18 @@ export default function HeroTransition() {
           />
         </div>
 
-        {/* Work veil — canvas dark, arrives at end of P3 for seamless handoff */}
+        {/* Work overlay — fades in during autoplay; Work content lives here */}
         <div
           ref={workOverlayRef}
-          aria-hidden="true"
           style={{
             position: "absolute", inset: 0,
-            backgroundColor: "#0a0908", opacity: 0,
+            opacity: 0,
             zIndex: 3, pointerEvents: "none",
+            overflowY: "auto",
           }}
-        />
+        >
+          <Work />
+        </div>
       </section>
     </div>
   );

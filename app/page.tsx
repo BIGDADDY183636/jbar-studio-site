@@ -1,6 +1,5 @@
 import Nav from "@/components/Nav";
 import HeroTransition from "@/components/HeroTransition";
-import Work from "@/components/Work";
 import WhatYouGet from "@/components/WhatYouGet";
 import Process from "@/components/Process";
 import Studio from "@/components/Studio";
@@ -21,7 +20,6 @@ export default function Home() {
       <SectionCounter />
       <main>
         <HeroTransition />
-        <Work />
         <div id="what-you-get">
           <WhatYouGet />
         </div>
