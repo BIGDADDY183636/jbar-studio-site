@@ -1,20 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Work from "@/components/Work";
+import HeroEntrance from "@/components/HeroEntrance";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
-const DIGIT_MS = 70;
-const MORPH_MS = 500;
-const J_START = 200;
-const STAGGER = 6 * DIGIT_MS;
-type Phase = "empty" | "counting" | "locked" | "morphed";
-
-const STARTS = LETTERS.reduce<number[]>(
-  (acc, _, i) => (i === 0 ? [J_START] : [...acc, acc[i - 1] + STAGGER]),
-  []
-);
-const SUB_REVEAL = STARTS[3] + 9 * DIGIT_MS + MORPH_MS + 400;
 
 const MOBILE_WORDMARK = [
   { letter: "J", color: "#d63031",                delay: "200ms" },
@@ -31,9 +21,8 @@ const WORDMARK_STYLE = {
 } as const;
 
 export default function HeroTransition() {
-  const [chars, setChars]   = useState(["J", "B", "A", "R"]);
-  const [phases, setPhases] = useState<Phase[]>(["empty", "empty", "empty", "empty"]);
-  const [showSub, setShowSub]         = useState(false);
+  const [wordmarkVisible, setWordmarkVisible] = useState(false);
+  const [showSub, setShowSub] = useState(false);
   // false on SSR / first render; set to true on desktop after mount
   const [scrollEnabled, setScrollEnabled] = useState(false);
 
@@ -53,6 +42,12 @@ export default function HeroTransition() {
     })
   );
 
+  // ── Entrance complete: show letters then tagline ───────────
+  const handleEntranceComplete = useCallback(() => {
+    setWordmarkVisible(true);
+    setTimeout(() => setShowSub(true), 300);
+  }, []);
+
   // ── 1. Detect scroll capability — re-check on resize ────────
   useEffect(() => {
     function check() {
@@ -66,55 +61,7 @@ export default function HeroTransition() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // ── 2. Count-up animation (runs in both branches) ───────────
-  useEffect(() => {
-    let rafId: number;
-    const timers: ReturnType<typeof setTimeout>[] = [];
-
-    rafId = requestAnimationFrame(() => {
-      LETTERS.forEach((letter, li) => {
-        const t0 = STARTS[li];
-
-        timers.push(
-          setTimeout(() => {
-            setChars((p) => p.map((c, i) => (i === li ? "1" : c)));
-            setPhases((p) => p.map((ph, i) => (i === li ? "counting" : ph)) as Phase[]);
-          }, t0)
-        );
-
-        for (let d = 2; d <= 9; d++) {
-          timers.push(
-            setTimeout(() => {
-              const el = letterRefs.current[li];
-              if (el) el.textContent = String(d);
-            }, t0 + (d - 1) * DIGIT_MS)
-          );
-        }
-
-        const snapAt = t0 + 9 * DIGIT_MS;
-        timers.push(
-          setTimeout(() => {
-            setChars((p) => p.map((c, i) => (i === li ? letter : c)));
-            setPhases((p) => p.map((ph, i) => (i === li ? "locked" : ph)) as Phase[]);
-          }, snapAt)
-        );
-        timers.push(
-          setTimeout(() => {
-            setPhases((p) => p.map((ph, i) => (i === li ? "morphed" : ph)) as Phase[]);
-          }, snapAt + MORPH_MS)
-        );
-      });
-
-      timers.push(setTimeout(() => setShowSub(true), SUB_REVEAL));
-    });
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      timers.forEach(clearTimeout);
-    };
-  }, []);
-
-  // ── 3. Scroll-driven animation + autoplay blow-through ────────
+  // ── 2. Scroll-driven animation + autoplay blow-through ────────
   useEffect(() => {
     if (!scrollEnabled) return;
 
@@ -347,29 +294,30 @@ export default function HeroTransition() {
             ))}
           </div>
 
-          {/* Desktop wordmark (count-up, no scroll anchor needed) */}
+          {/* Desktop wordmark — particle entrance, then scroll-driven */}
           <div
             className="hidden md:flex items-end justify-center select-none"
             style={{ lineHeight: 0.85, minHeight: "clamp(102px, 18.7vw, 238px)" }}
           >
-            <div style={{ display: "inline-flex", alignItems: "flex-end" }}>
+            <div style={{ display: "inline-block" }}>
               {LETTERS.map((letter, i) => (
                 <span
                   key={letter}
                   ref={slotCallbacks.current[i]}
-                  className={phases[i] === "locked" ? "letter-morph" : ""}
                   style={{
                     ...WORDMARK_STYLE,
                     display: "inline-block",
                     color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
-                    opacity: phases[i] === "empty" ? 0 : 1,
+                    opacity: wordmarkVisible ? 1 : 0,
+                    transition: "opacity 300ms ease",
                   }}
                 >
-                  {chars[i]}
+                  {letter}
                 </span>
               ))}
             </div>
           </div>
+          <HeroEntrance letterRefs={letterRefs} onComplete={handleEntranceComplete} />
 
           <div
             className="hero-sub-mobile"
@@ -482,20 +430,22 @@ export default function HeroTransition() {
                 <span
                   key={letter}
                   ref={slotCallbacks.current[i]}
-                  className={phases[i] === "locked" ? "letter-morph" : ""}
                   style={{
                     ...WORDMARK_STYLE,
                     display: "inline-block",
                     color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
-                    opacity: phases[i] === "empty" ? 0 : 1,
+                    opacity: wordmarkVisible ? 1 : 0,
+                    transition: "opacity 300ms ease",
                     willChange: i === 2 ? "transform, color" : "opacity",
                   }}
                 >
-                  {chars[i]}
+                  {letter}
                 </span>
               ))}
             </div>
           </div>
+
+          <HeroEntrance letterRefs={letterRefs} onComplete={handleEntranceComplete} />
 
           {/* Tagline + CTA — fades out in P1 */}
           <div
