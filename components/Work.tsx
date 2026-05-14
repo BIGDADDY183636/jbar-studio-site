@@ -70,9 +70,9 @@ const projects = [
 
 export default function Work() {
   return (
-    <>
+    <div style={{ backgroundColor: "#00A7E1" }}>
       {/* ── Client Work header ── */}
-      <div id="work" className="bg-canvas border-t border-paper/[0.08] py-12">
+      <div id="work" className="border-t border-white/[0.15] py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <Reveal>
             <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase">
@@ -92,7 +92,7 @@ export default function Work() {
       {/* ── DJE Advisors — full-width client work card ── */}
       <section className="border-t border-paper/[0.08]">
         <div className="max-w-7xl mx-auto">
-          <Reveal className="px-8 py-10 bg-canvas border-b border-paper/[0.06]">
+          <Reveal className="px-8 py-10 border-b border-white/[0.15]">
             {/* Label */}
             <p className="font-mono text-[0.58rem] tracking-[0.2em] uppercase mb-5">
               <span className="text-paper/30">[ </span>
@@ -140,7 +140,7 @@ export default function Work() {
       </section>
 
       {/* ── Concept Work header ── */}
-      <div className="bg-canvas border-t border-paper/[0.08] py-12">
+      <div className="border-t border-white/[0.15] py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <Reveal>
             <p className="font-mono text-[0.6rem] tracking-[0.2em] uppercase">
@@ -169,7 +169,6 @@ export default function Work() {
                   "px-8 py-10",
                   "border-b border-paper/[0.06]",
                   i % 2 === 0 ? "md:border-r border-paper/[0.06]" : "",
-                  Math.floor(i / 2) % 2 === 0 ? "bg-canvas" : "bg-canvas-alt",
                 ].join(" ")}
               >
                 {/* Bracket label */}
@@ -221,6 +220,6 @@ export default function Work() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

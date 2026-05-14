@@ -115,12 +115,12 @@
 /* (handled via inline styles in Reveal.tsx) */
 
 /* ── Hero scroll-jack container ─────────────────────────────
-   200vh outer gives the sticky hero 100vh of scroll budget.
-   raw=1.0 at 1×innerHeight of scroll; blow-through is autoplay.
+   160vh outer gives the sticky hero 60vh of scroll budget.
+   raw=1.0 at 0.6×innerHeight of scroll; blow-through is autoplay.
    Reduced-motion: restore normal flow — no sticky, no JS.      */
 .hero-outer {
   position: relative;
-  height: 130vh;
+  height: 160vh;
 }
 .hero-sticky {
   position: sticky;

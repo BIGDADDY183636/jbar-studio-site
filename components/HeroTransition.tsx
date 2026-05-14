@@ -156,11 +156,13 @@ export default function HeroTransition() {
         } else {
           autoplayRaf = 0;
           // Collapse outer height so sticky releases immediately.
-          // new height = innerHeight − outerRect.top makes outer_bottom
-          // exactly flush with the viewport bottom, releasing the pin.
+          // outer_bottom = outerTop + height; sticky releases when ≤ innerHeight.
+          // Subtract 1px past the boundary; force a sync layout read so the
+          // browser re-evaluates sticky before the next scroll event fires.
           const outerTop = outer!.getBoundingClientRect().top;
           if (outerTop <= 0) {
-            outer!.style.height = `${Math.round(window.innerHeight - outerTop)}px`;
+            outer!.style.height = `${Math.round(window.innerHeight - outerTop) - 1}px`;
+            void outer!.getBoundingClientRect(); // force layout / sticky recalc
           }
           window.addEventListener("scroll", onScroll, { passive: true });
         }
@@ -171,8 +173,8 @@ export default function HeroTransition() {
     function update() {
       const outerRect = outer!.getBoundingClientRect();
       const scrolled  = -outerRect.top;
-      // 130vh outer → 30vh travel → raw 0→1 over 0.3×innerHeight
-      const raw = Math.max(0, Math.min(scrolled / (0.3 * window.innerHeight), 1));
+      // 160vh outer → 60vh travel → raw 0→1 over 0.6×innerHeight
+      const raw = Math.max(0, Math.min(scrolled / (0.6 * window.innerHeight), 1));
 
       const [j, b, a, r] = letterRefs.current;
       if (!j || !b || !a || !r) { raf = 0; return; }
@@ -413,10 +415,9 @@ export default function HeroTransition() {
   }
 
   // ── SCROLL HERO — desktop ───────────────────────────────────
-  // 130vh outer / 30vh travel. Cyan slab follows so the user
-  // lands on it when the sticky releases after autoplay.
+  // 160vh outer / 60vh travel. Work section (cyan) follows directly
+  // so the user lands on it when the sticky releases after autoplay.
   return (
-    <>
     <div ref={outerRef} className="hero-outer">
       <section
         id="hero"
@@ -549,12 +550,5 @@ export default function HeroTransition() {
         />
       </section>
     </div>
-
-    {/* Cyan landing panel — first visible content after sticky releases */}
-    <div
-      aria-hidden="true"
-      style={{ height: "100vh", backgroundColor: "#00A7E1" }}
-    />
-    </>
   );
 }
