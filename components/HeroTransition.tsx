@@ -129,17 +129,8 @@ export default function HeroTransition() {
     let autoplayRaf = 0;
     let autoplayed = false;
 
-    function measureA() {
-      const a = letterRefs.current[2];
-      if (!anchor || !a) return;
-      const aRect      = a.getBoundingClientRect();
-      const anchorRect = anchor.getBoundingClientRect();
-      anchor.style.transformOrigin =
-        `${aRect.left - anchorRect.left + aRect.width / 2}px center`;
-    }
-
     // Autoplay: 400ms rAF loop driving the blow-through.
-    // Called once scroll listener is detached so there's no conflict.
+    // Scroll listener detached before start; re-attached on completion.
     function startAutoplay() {
       autoplayed = true;
       window.removeEventListener("scroll", onScroll);
@@ -164,7 +155,13 @@ export default function HeroTransition() {
           autoplayRaf = requestAnimationFrame(tick);
         } else {
           autoplayRaf = 0;
-          // Re-attach so scroll-back detection works
+          // Collapse outer height so sticky releases immediately.
+          // new height = innerHeight − outerRect.top makes outer_bottom
+          // exactly flush with the viewport bottom, releasing the pin.
+          const outerTop = outer!.getBoundingClientRect().top;
+          if (outerTop <= 0) {
+            outer!.style.height = `${Math.round(window.innerHeight - outerTop)}px`;
+          }
           window.addEventListener("scroll", onScroll, { passive: true });
         }
       }
@@ -180,11 +177,27 @@ export default function HeroTransition() {
       const [j, b, a, r] = letterRefs.current;
       if (!j || !b || !a || !r) { raf = 0; return; }
 
-      // Reset flag when user scrolls well back — allows re-trigger
-      if (autoplayed && raw < 0.5) autoplayed = false;
+      // Re-measure transform-origin each tick as a percentage.
+      // getBoundingClientRect reflects current transforms; the ratio of
+      // A's AABB-center within anchor's width is preserved under uniform
+      // scale, and pure rotation around an element's own center keeps
+      // its AABB center fixed — so the percentage stays correct at any
+      // scale or rotation angle.
+      const anchorRect = anchor!.getBoundingClientRect();
+      const aRect = a.getBoundingClientRect();
+      if (anchorRect.width > 0) {
+        const pct = (aRect.left + aRect.width / 2 - anchorRect.left) / anchorRect.width * 100;
+        anchor!.style.transformOrigin = `${pct.toFixed(2)}% center`;
+      }
+
+      // Reset flag + restore outer height when user scrolls well back
+      if (autoplayed && raw < 0.5) {
+        autoplayed = false;
+        outer!.style.height = ""; // restore CSS 130vh
+      }
 
       if (autoplayed) {
-        // Hold blow-through at completion; don't disturb anchor/a
+        // Hold blow-through at completion; don't disturb anchor/a transforms
         bgOverlay!.style.backgroundColor = "rgb(0,167,225)";
         bgOverlay!.style.opacity = "1";
         content!.style.opacity = "0";
@@ -253,11 +266,11 @@ export default function HeroTransition() {
     let resizeTimer: ReturnType<typeof setTimeout>;
     function onResize() {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(measureA, 100);
+      // Re-run full update on resize (remeasures transform-origin + re-applies state)
+      resizeTimer = setTimeout(() => { if (!raf) raf = requestAnimationFrame(update); }, 100);
     }
 
-    measureA();
-    document.fonts.ready.then(measureA);
+    document.fonts.ready.then(() => { if (!raf) raf = requestAnimationFrame(update); });
     update();
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -400,8 +413,10 @@ export default function HeroTransition() {
   }
 
   // ── SCROLL HERO — desktop ───────────────────────────────────
-  // 300vh outer gives the sticky section 200vh of scroll budget.
+  // 130vh outer / 30vh travel. Cyan slab follows so the user
+  // lands on it when the sticky releases after autoplay.
   return (
+    <>
     <div ref={outerRef} className="hero-outer">
       <section
         id="hero"
@@ -459,7 +474,7 @@ export default function HeroTransition() {
           >
             <div
               ref={anchorRef}
-              style={{ display: "inline-flex", alignItems: "flex-end", willChange: "transform" }}
+              style={{ display: "inline-block", willChange: "transform" }}
             >
               {LETTERS.map((letter, i) => (
                 <span
@@ -534,5 +549,12 @@ export default function HeroTransition() {
         />
       </section>
     </div>
+
+    {/* Cyan landing panel — first visible content after sticky releases */}
+    <div
+      aria-hidden="true"
+      style={{ height: "100vh", backgroundColor: "#00A7E1" }}
+    />
+    </>
   );
 }
