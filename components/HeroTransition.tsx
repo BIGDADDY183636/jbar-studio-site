@@ -144,60 +144,60 @@ export default function HeroTransition() {
       const [j, b, a, r] = letterRefs.current;
       if (!j || !b || !a || !r) { raf = 0; return; }
 
-      // Normalised phase progress, each 0→1
-      const p1 = Math.min(raw / 0.25, 1);
-      const p2 = Math.max(0, Math.min((raw - 0.25) / 0.53, 1));
-      const p3 = Math.max(0, Math.min((raw - 0.78) / 0.22, 1));
+      // ── Phase progress (0→1 each) ──────────────────────────
+      // settle 0.00–0.10 | spin 0.10–0.70 | blow 0.70–1.00
+      const pSettle = Math.min(raw / 0.10, 1);
+      const pSpin   = Math.max(0, Math.min((raw - 0.10) / 0.60, 1));
+      const pBlow   = Math.max(0, Math.min((raw - 0.70) / 0.30, 1));
 
-      // ── Scale (.wm-anchor) ─────────────────────────────────
+      // ── Scale ──────────────────────────────────────────────
       let scale: number;
-      if (raw <= 0.25)       scale = 1 + p1 * 1;       // 1→2
-      else if (raw <= 0.78)  scale = 2 + p2 * 2;       // 2→4
-      else                    scale = 4 + p3 * 40;      // 4→44
+      if (raw <= 0.10)       scale = 1 + pSettle * 0.2;   // 1→1.2
+      else if (raw <= 0.70)  scale = 1.2 + pSpin * 2.8;   // 1.2→4
+      else                    scale = 4 + pBlow * 40;      // 4→44
 
-      // ── A rotation ─────────────────────────────────────────
-      // Starts at raw=0.10 (while A is still readable).
-      // 0.10→0.78: ease-in (t²) 0→540deg.
-      // P3 adds +600deg on top.
+      // ── A rotation — ease-in across spin, continues in blow ─
       let aRotate: number;
       if (raw <= 0.10) {
         aRotate = 0;
-      } else if (raw <= 0.78) {
-        const t = (raw - 0.10) / 0.68;   // 0→1 across 0.10–0.78
-        aRotate = t * t * 540;            // ease-in
+      } else if (raw <= 0.70) {
+        aRotate = pSpin * pSpin * 540;    // ease-in 0→540deg
       } else {
-        aRotate = 540 + p3 * 600;         // 540→1140deg
+        aRotate = 540 + pBlow * 600;      // 540→1140deg
       }
 
-      // ── A color — white → #00A7E1 over P2 ─────────────────
+      // ── A color — white → #00A7E1 over spin ───────────────
       // rgb(0,167,225); deltas from white: r:−255, g:−88, b:−30
       let aColor: string;
-      if (raw <= 0.25) {
+      if (raw <= 0.10) {
         aColor = "rgb(255,255,255)";
-      } else if (raw <= 0.78) {
-        const cr = Math.round(255 - p2 * 255);
-        const cg = Math.round(255 - p2 * 88);
-        const cb = Math.round(255 - p2 * 30);
+      } else if (raw <= 0.70) {
+        const cr = Math.round(255 - pSpin * 255);
+        const cg = Math.round(255 - pSpin * 88);
+        const cb = Math.round(255 - pSpin * 30);
         aColor = `rgb(${cr},${cg},${cb})`;
       } else {
         aColor = "#00A7E1";
       }
 
-      // ── J/B/R fade out in early P2 ─────────────────────────
-      const jbrOpacity = raw <= 0.25 ? 1 : Math.max(0, 1 - p2 / 0.15);
+      // ── J/B/R — fully out by raw=0.55 (pSpin=0.75) ────────
+      const jbrOpacity = raw <= 0.10 ? 1 : Math.max(0, 1 - pSpin / 0.75);
 
-      // ── Tagline+CTA fade out over P1 ───────────────────────
-      const subOpacity = Math.max(0, 1 - p1);
+      // ── Tagline+CTA — 1→0.7 in settle, 0.7→0 over spin ───
+      let subOpacity: number;
+      if (raw <= 0.10)       subOpacity = 1 - pSettle * 0.3;  // 1→0.7
+      else if (raw <= 0.70)  subOpacity = 0.7 * (1 - pSpin);  // 0.7→0
+      else                    subOpacity = 0;
 
-      // ── P3: bg flood, content fade, work veil ──────────────
-      const bgG = Math.round(p3 * 167);
-      const bgB = Math.round(p3 * 225);
+      // ── Blow-through: bg flood, content fade, work veil ───
+      const bgG = Math.round(pBlow * 167);
+      const bgB = Math.round(pBlow * 225);
       bgOverlay!.style.backgroundColor = `rgb(0,${bgG},${bgB})`;
-      bgOverlay!.style.opacity = raw < 0.78 ? "0" : String(p3);
+      bgOverlay!.style.opacity = raw < 0.70 ? "0" : String(pBlow);
 
-      content!.style.opacity = raw < 0.78 ? "1" : String(Math.max(0, 1 - p3));
+      content!.style.opacity = raw < 0.70 ? "1" : String(Math.max(0, 1 - pBlow));
 
-      workOverlay!.style.opacity = raw < 0.78 ? "0" : String(Math.min(p3 * 1.4, 1));
+      workOverlay!.style.opacity = raw < 0.70 ? "0" : String(Math.min(pBlow * 1.4, 1));
 
       // ── Apply ───────────────────────────────────────────────
       anchor!.style.transform = `scale(${scale})`;
