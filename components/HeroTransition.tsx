@@ -45,7 +45,7 @@ export default function HeroTransition() {
   // ── Entrance complete: show letters then tagline ───────────
   const handleEntranceComplete = useCallback(() => {
     setWordmarkVisible(true);
-    setTimeout(() => setShowSub(true), 300);
+    setTimeout(() => setShowSub(true), 600); // wait for 600ms letter crossfade
   }, []);
 
   // ── 1. Detect scroll capability — re-check on resize ────────
@@ -309,7 +309,7 @@ export default function HeroTransition() {
                     display: "inline-block",
                     color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
                     opacity: wordmarkVisible ? 1 : 0,
-                    transition: "opacity 300ms ease",
+                    transition: "opacity 600ms ease",
                   }}
                 >
                   {letter}
@@ -435,7 +435,7 @@ export default function HeroTransition() {
                     display: "inline-block",
                     color: i === 0 ? "#d63031" : "rgba(244,241,234,0.85)",
                     opacity: wordmarkVisible ? 1 : 0,
-                    transition: "opacity 300ms ease",
+                    transition: "opacity 600ms ease",
                     willChange: i === 2 ? "transform, color" : "opacity",
                   }}
                 >
