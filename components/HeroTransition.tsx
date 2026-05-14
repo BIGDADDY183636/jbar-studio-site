@@ -128,6 +128,7 @@ export default function HeroTransition() {
     let raf = 0;
     let autoplayRaf = 0;
     let autoplayed = false;
+    let snapTimer = 0;
 
     // Autoplay: 400ms rAF loop driving the blow-through.
     // Scroll listener detached before start; re-attached on completion.
@@ -166,13 +167,13 @@ export default function HeroTransition() {
           void outer!.offsetHeight;
           // 3. Snap scroll to Work's top edge — outer.offsetTop + offsetHeight
           //    is exactly where Work begins after the collapse.
-          window.scrollTo({ top: outer!.offsetTop + outer!.offsetHeight, behavior: "instant" });
-          // 4. Restore scroll and re-attach listener in the next frame so the
-          //    scrollTo has settled before any scroll events can fire.
-          requestAnimationFrame(() => {
+          window.scrollTo({ top: outer!.offsetTop + outer!.offsetHeight, behavior: "smooth" });
+          // 4. Restore scroll and re-attach listener after smooth scroll settles
+          //    (~300ms). overflow stays hidden so nothing interferes mid-scroll.
+          snapTimer = window.setTimeout(() => {
             document.body.style.overflow = "";
             window.addEventListener("scroll", onScroll, { passive: true });
-          });
+          }, 400);
         }
       }
       autoplayRaf = requestAnimationFrame(tick);
@@ -291,6 +292,7 @@ export default function HeroTransition() {
       if (raf) cancelAnimationFrame(raf);
       if (autoplayRaf) cancelAnimationFrame(autoplayRaf);
       clearTimeout(resizeTimer);
+      clearTimeout(snapTimer);
       document.body.style.overflow = ""; // restore if unmounted mid-autoplay
     };
   }, [scrollEnabled]);
