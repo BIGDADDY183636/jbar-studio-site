@@ -1,5 +1,5 @@
 import Nav from "@/components/Nav";
-import Hero from "@/components/Hero";
+import HeroTransition from "@/components/HeroTransition";
 import Work from "@/components/Work";
 import WhatYouGet from "@/components/WhatYouGet";
 import Process from "@/components/Process";
@@ -20,7 +20,7 @@ export default function Home() {
       <StickyNav />
       <SectionCounter />
       <main>
-        <Hero />
+        <HeroTransition />
         <Work />
         <div id="what-you-get">
           <WhatYouGet />

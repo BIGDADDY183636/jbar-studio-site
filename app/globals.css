@@ -114,6 +114,24 @@
 /* ── Scroll reveal ──────────────────────────────────── */
 /* (handled via inline styles in Reveal.tsx) */
 
+/* ── Hero scroll-jack container ─────────────────────────────
+   300vh outer gives the sticky hero 200vh of scroll budget.
+   Reduced-motion: restore normal flow — no sticky, no JS.      */
+.hero-outer {
+  position: relative;
+  height: 300vh;
+}
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-outer  { height: auto; }
+  .hero-sticky { position: relative; min-height: 88vh; height: auto; overflow: visible; }
+}
+
 /* ── Reduced motion ─────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
