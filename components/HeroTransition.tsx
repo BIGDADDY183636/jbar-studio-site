@@ -155,15 +155,24 @@ export default function HeroTransition() {
           autoplayRaf = requestAnimationFrame(tick);
         } else {
           autoplayRaf = 0;
+          const outerTop    = outer!.getBoundingClientRect().top;
+          const ih          = window.innerHeight;
+          const sy          = window.scrollY;
+          const collapseH   = Math.round(ih - outerTop) - 1;
+          const beforeH     = outer!.offsetHeight;
           // Collapse outer height so sticky releases immediately.
           // outer_bottom = outerTop + height; sticky releases when ≤ innerHeight.
           // Subtract 1px past the boundary; force a sync layout read so the
           // browser re-evaluates sticky before the next scroll event fires.
-          const outerTop = outer!.getBoundingClientRect().top;
           if (outerTop <= 0) {
-            outer!.style.height = `${Math.round(window.innerHeight - outerTop) - 1}px`;
+            outer!.style.height = `${collapseH}px`;
             void outer!.getBoundingClientRect(); // force layout / sticky recalc
           }
+          const afterH = outer!.offsetHeight;
+          console.log("[autoplay done]", {
+            outerTop, innerHeight: ih, scrollY: sy,
+            collapseH, beforeH, afterH,
+          });
           window.addEventListener("scroll", onScroll, { passive: true });
         }
       }
