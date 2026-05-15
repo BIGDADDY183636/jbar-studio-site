@@ -11,7 +11,7 @@ export default function FooterManifesto() {
           letterSpacing: "-0.04em",
         }}
       >
-        Built in Chicago.
+        Small studio.
       </p>
       <p
         className="font-sans font-black leading-none mt-3"
@@ -21,7 +21,7 @@ export default function FooterManifesto() {
           color: "rgba(244,241,234,0.72)",
         }}
       >
-        For Chicago.
+        Big builds.
       </p>
     </section>
   );
