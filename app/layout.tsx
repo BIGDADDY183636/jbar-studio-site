@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,12 +19,21 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jbar.studio"),
-  title: "JBAR Design Studio — Custom Websites for Independent Businesses",
+  title: "JBAR Design Studio — $400 Custom Websites for Small Businesses",
   description:
-    "Custom websites for Chicago's independent businesses. $400 flat, built in a week, live forever. Independent web studio on the North Side.",
+    "Custom-coded websites for independent businesses. Flat $400, 1-week build, up to 5 pages. Hosted on Vercel. Based in Chicago.",
+  keywords: ["web designer Chicago", "small business website", "custom website $400", "affordable web design", "Chicago web design"],
   openGraph: {
-    description:
-      "Custom websites for Chicago's independent businesses. $400 flat, built in a week, live forever. Independent web studio on the North Side.",
+    title: "JBAR Design Studio — $400 Custom Websites",
+    description: "Custom-coded websites for independent businesses. Flat $400, 1-week build.",
+    url: "https://jbar.studio",
+    siteName: "JBAR Design Studio",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JBAR Design Studio — $400 Custom Websites",
+    description: "Custom-coded websites for independent businesses. Flat $400, 1-week build.",
   },
 };
 
@@ -34,7 +44,29 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <Script
+          id="local-business-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "JBAR Design Studio",
+              "description": "Custom-coded websites for independent businesses. Flat $400, 1-week build.",
+              "url": "https://jbar.studio",
+              "email": "hello@jbar.studio",
+              "areaServed": {
+                "@type": "City",
+                "name": "Chicago",
+              },
+              "priceRange": "$400",
+              "image": "https://jbar.studio/og-image.png",
+            }),
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
