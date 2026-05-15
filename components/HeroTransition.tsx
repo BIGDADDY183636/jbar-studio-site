@@ -137,8 +137,8 @@ export default function HeroTransition() {
     function update() {
       const outerRect = outer!.getBoundingClientRect();
       const scrolled  = -outerRect.top;
-      // 160vh outer → 60vh travel → raw 0→1 over 0.6×innerHeight
-      const raw = Math.max(0, Math.min(scrolled / (0.6 * window.innerHeight), 1));
+      // 220vh outer → 120vh travel → raw 0→1 over 1.2×innerHeight
+      const raw = Math.max(0, Math.min(scrolled / (1.2 * window.innerHeight), 1));
 
       const [j, b, a, r] = letterRefs.current;
       if (!j || !b || !a || !r) { raf = 0; return; }
@@ -388,7 +388,7 @@ export default function HeroTransition() {
   }
 
   // ── SCROLL HERO — desktop ───────────────────────────────────
-  // 160vh outer / 60vh travel. Work section (cyan) follows directly
+  // 220vh outer / 120vh travel. Work section follows directly
   // so the user lands on it when the sticky releases after autoplay.
   return (
     <div ref={outerRef} className="hero-outer">
