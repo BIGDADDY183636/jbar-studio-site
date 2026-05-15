@@ -6,13 +6,6 @@ import HeroEntrance from "@/components/HeroEntrance";
 
 const LETTERS = ["J", "B", "A", "R"] as const;
 
-const MOBILE_WORDMARK = [
-  { letter: "J", color: "#d63031",                delay: "200ms" },
-  { letter: "B", color: "rgba(244,241,234,0.85)", delay: "350ms" },
-  { letter: "A", color: "rgba(244,241,234,0.85)", delay: "500ms" },
-  { letter: "R", color: "rgba(244,241,234,0.85)", delay: "650ms" },
-] as const;
-
 const WORDMARK_STYLE = {
   fontFamily: "var(--font-inter), sans-serif",
   fontWeight: 900,
@@ -309,18 +302,9 @@ export default function HeroTransition() {
             JBAR Design Studio&ensp;—&ensp;Chicago, IL
           </p>
 
-          {/* Mobile wordmark */}
-          <div className="flex md:hidden items-end justify-center select-none" style={{ lineHeight: 0.85 }}>
-            {MOBILE_WORDMARK.map(({ letter, color, delay }) => (
-              <span key={letter} className="mobile-letter" style={{ ...WORDMARK_STYLE, color, animationDelay: delay }}>
-                {letter}
-              </span>
-            ))}
-          </div>
-
-          {/* Desktop wordmark — particle entrance, then scroll-driven */}
+          {/* Wordmark — particle entrance on both mobile and desktop */}
           <div
-            className="hidden md:flex items-end justify-center select-none"
+            className="flex items-end justify-center select-none"
             style={{ lineHeight: 0.85, minHeight: "clamp(102px, 18.7vw, 238px)" }}
           >
             <div style={{ display: "inline-block" }}>
@@ -432,18 +416,9 @@ export default function HeroTransition() {
             JBAR Design Studio&ensp;—&ensp;Chicago, IL
           </p>
 
-          {/* Mobile wordmark */}
-          <div className="flex md:hidden items-end justify-center select-none" style={{ lineHeight: 0.85 }}>
-            {MOBILE_WORDMARK.map(({ letter, color, delay }) => (
-              <span key={letter} className="mobile-letter" style={{ ...WORDMARK_STYLE, color, animationDelay: delay }}>
-                {letter}
-              </span>
-            ))}
-          </div>
-
-          {/* Desktop wordmark — .wm-anchor scales; A rotates independently */}
+          {/* Wordmark — .wm-anchor scales; A rotates independently */}
           <div
-            className="hidden md:flex items-end justify-center select-none"
+            className="flex items-end justify-center select-none"
             style={{ lineHeight: 0.85, minHeight: "clamp(102px, 18.7vw, 238px)" }}
           >
             <div
